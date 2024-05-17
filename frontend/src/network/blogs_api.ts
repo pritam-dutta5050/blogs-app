@@ -2,6 +2,7 @@ import { ConflictError, UnauthorizedError } from "../errors/httperrors";
 import { CommentInterface } from "../interfaces/CommentInterface";
 import { LoginInterface } from "../interfaces/LoginInterface";
 import { SignupInterface } from "../interfaces/SignupInterface";
+import { BlogInterface } from "../interfaces/BlogInterface";
 import { BlogModel } from "../models/BlogModel";
 import { UserModel } from "../models/UserModel";
 
@@ -27,13 +28,14 @@ export async function fetchData(input: RequestInfo, init?: RequestInit) {
   }
 }
 
+
+
 export async function getloggedinUser(): Promise<UserModel> {
   const response = await fetchData("/api/users", {
     method: "GET",
   });
   return response.json();
 }
-
 export async function signupUser(
   credentials: SignupInterface
 ): Promise<UserModel> {
@@ -46,6 +48,23 @@ export async function signupUser(
   });
   return response.json();
 }
+export async function loginUser(
+  credentials: LoginInterface
+): Promise<UserModel> {
+  const response = await fetchData("/api/users/login", {
+    method: "POST",
+    body: JSON.stringify(credentials),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.json();
+}
+export async function logoutUser() {
+  await fetchData("/api/users/logout", { method: "POST" });
+}
+
+
 
 export async function addComment(
   commentBody: CommentInterface,
@@ -86,22 +105,9 @@ export async function editComment(commentBody: CommentInterface, blogId: string)
     return response.json();
   
 }
-export async function loginUser(
-  credentials: LoginInterface
-): Promise<UserModel> {
-  const response = await fetchData("/api/users/login", {
-    method: "POST",
-    body: JSON.stringify(credentials),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return response.json();
-}
 
-export async function logoutUser() {
-  await fetchData("/api/users/logout", { method: "POST" });
-}
+
+
 
 export async function fetchBlogs(): Promise<BlogModel[]> {
   const response = await fetchData("/api/blogs/", {
@@ -110,6 +116,16 @@ export async function fetchBlogs(): Promise<BlogModel[]> {
   return response.json();
 }
 
+export async function addBlog(blogBody: BlogInterface): Promise<BlogModel> {
+  const response = await fetchData("api/blogs/", {
+    method: "POST",
+    body: JSON.stringify(blogBody),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.json();
+}
 export async function likeBlog(blogId: string | undefined): Promise<BlogModel> {
   const response = await fetchData("/api/blogs/like/" + blogId, {
     method: "POST",

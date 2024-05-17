@@ -104,7 +104,7 @@ const CommentsModal = ({
       <Modal.Footer>
         <Form onSubmit={handleSubmit(onSubmit)} className="w-100">
           <Row className="m-1">
-            <Col xs={10}>
+            <Col xs={9} className="m-0">
               <TextInputField
                 name="commentText"
                 placeholder="Add comment here"
@@ -117,7 +117,7 @@ const CommentsModal = ({
                 rows={3}
               />
             </Col>
-            <Col xs={2}>
+            <Col xs={3} className="m-0">
               <Button
                 type="submit"
                 variant="success"
