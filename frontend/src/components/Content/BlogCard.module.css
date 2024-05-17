@@ -1,0 +1,29 @@
+.blogCard{
+    background-color: rgb(170, 241, 238);
+    
+    margin-bottom: 4px;
+}
+
+.cardHeader {
+    background-color: rgb(93, 238, 238);
+  display: flex;
+  justify-content: space-between;
+}
+
+.blogUser {
+  
+}
+.timestamp{
+    font-size: small;
+    margin: 0;
+}
+.headerButtons {
+  float: right;
+}
+.headerButton{
+    margin: 0px 2px;
+    padding: 5px 10px;
+    font-size: 16px;
+    height: 100%;
+    
+}

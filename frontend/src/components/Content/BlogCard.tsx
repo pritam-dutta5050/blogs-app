@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { MdMessage, MdThumbUp } from "react-icons/md";
+import { MdDelete, MdEdit, MdMessage, MdThumbUp } from "react-icons/md";
 import { BlogModel } from "../../models/BlogModel";
 import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
 import CommentsModal from "./CommentsModal";
+import styles from "./BlogCard.module.css";
+import { formatDate } from "../../utils/formatDate";
+import "bootstrap/dist/css/bootstrap.min.css"
 
 interface BlogCardProps {
   blog: BlogModel;
   loggedInuserId: string;
+  onDeleteButtonClicked : () => void;
+  onEditButtonClicked : () => void;
 }
 
-const BlogCard = ({ blog, loggedInuserId }: BlogCardProps) => {
+const BlogCard = ({ blog, loggedInuserId, onDeleteButtonClicked, onEditButtonClicked }: BlogCardProps) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
@@ -21,19 +26,39 @@ const BlogCard = ({ blog, loggedInuserId }: BlogCardProps) => {
     setCurrentBlog(blog);
   }
 
+  async function getUserById(userId: string) {
+    const user: UserModel = await BlogsApi.getUserById(userId);
+    setBlogUser(user);
+  }
   useEffect(() => {
-    async function getUserById(userId: string) {
-      const user: UserModel = await BlogsApi.getUserById(userId);
-      setBlogUser(user);
-    }
     getUserById(blog.userId);
-  }, []);
+    setCurrentBlog(blog)
+  }, [blog]);
 
+  
+  
   return (
     <div>
-      <Card className="m-auto mt-2 w-80">
-        <Card.Header as={"h5"}>
-          {blogUser?.firstName} {blogUser?.lastName}
+      <Card className={`${styles.blogCard}`}>
+        <Card.Header as={"h5"} className={styles.cardHeader}>
+          <div className={`${styles.blogUser}`}>
+            {blogUser?.firstName} {blogUser?.lastName}
+            <br />
+            <span className={styles.timestamp}>
+              {formatDate(blog.createdAt)}
+            </span>
+          </div>
+          {blog.userId === loggedInuserId && (
+            <div className={`${styles.headerButtons}`}>
+              <Button variant="info" className={`${styles.headerButton}`} onClick={onEditButtonClicked}>
+                <MdEdit />
+              </Button>
+
+              <Button variant="danger" className={`${styles.headerButton}`} onClick={onDeleteButtonClicked}>
+                <MdDelete />
+              </Button>
+            </div>
+          )}
         </Card.Header>
         <Card.Body>
           <Card.Title as={"h6"}>{currentBlog.blogTitle}</Card.Title>

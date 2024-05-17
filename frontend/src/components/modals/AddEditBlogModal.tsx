@@ -1,19 +1,24 @@
-import React, { useState } from 'react'
-import { Alert, Button, Form, Modal } from 'react-bootstrap'
-import TextInputField from '../form/TextInputField'
-import { useForm } from 'react-hook-form';
-import { BlogInterface } from '../../interfaces/BlogInterface';
+import React, { useState } from "react";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
+import TextInputField from "../form/TextInputField";
+import { useForm } from "react-hook-form";
+import { BlogInterface } from "../../interfaces/BlogInterface";
 import * as BlogsApi from "../../network/blogs_api";
-import { BlogModel } from '../../models/BlogModel';
-import { UnauthorizedError } from '../../errors/httperrors';
+import { BlogModel } from "../../models/BlogModel";
+import { UnauthorizedError } from "../../errors/httperrors";
 
-interface AddEditBlogModalProps{
-    onDismiss: ()=>void;
-    onBlogAdditionSuccessful: (responseBlog: BlogModel)=>void;
+interface AddEditBlogModalProps {
+  onDismiss: () => void;
+  onBlogSaved: (responseBlog: BlogModel) => void;
+  blogToEdit?: BlogModel | null;
 }
 
-const AddEditBlogModal = ({onDismiss, onBlogAdditionSuccessful}:AddEditBlogModalProps) => {
-    const [errorText, setErrorText] = useState<string|null>(null);
+const AddEditBlogModal = ({
+  onDismiss,
+  onBlogSaved,
+  blogToEdit,
+}: AddEditBlogModalProps) => {
+  const [errorText, setErrorText] = useState<string | null>(null);
 
   const {
     register,
@@ -21,66 +26,68 @@ const AddEditBlogModal = ({onDismiss, onBlogAdditionSuccessful}:AddEditBlogModal
     formState: { errors, isSubmitting },
   } = useForm<BlogInterface>({
     defaultValues: {
-      blogTitle: "",
-      blogContent: "",
+      blogTitle: blogToEdit?.blogTitle || "",
+      blogContent: blogToEdit?.blogContent || "",
     },
   });
 
-  async function onSubmit(blogBody:BlogInterface){
+  async function onSubmit(blogBody: BlogInterface) {
     try {
-      const responseBlog = await BlogsApi.addBlog(blogBody);
-      onBlogAdditionSuccessful(responseBlog);
-    } catch (error) {
-      if(error instanceof UnauthorizedError){
-        setErrorText(error.message);
+      let responseBlog: BlogModel;
+      if (!blogToEdit) {
+        responseBlog = await BlogsApi.addBlog(blogBody);
+      } else {
+        responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
       }
-      else{
+      onBlogSaved(responseBlog);
+    } catch (error) {
+      if (error instanceof UnauthorizedError) {
+        setErrorText(error.message);
+      } else {
         alert(error);
-
       }
       console.error(error);
     }
   }
+
   return (
     <div>
-        <Modal show onHide={onDismiss}>
+      <Modal show onHide={onDismiss}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Blog</Modal.Title>
+          <Modal.Title>{blogToEdit ? "Update Blog" : "Add Blog"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {errorText && 
-        <Alert variant='danger'>
-          {errorText}
-        </Alert>
-        }
+          {errorText && <Alert variant="danger">{errorText}</Alert>}
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <TextInputField 
-            label="Title"
-            name="blogTitle"
-            type="text"
-            placeholder="Enter blog title"
-            register={register}
-            registerOptions={{required: "Title is required"}}
-            error={errors.blogTitle}
-            isFeedbackRequired = {true}
+            <TextInputField
+              label="Title"
+              name="blogTitle"
+              type="text"
+              placeholder="Enter blog title"
+              register={register}
+              registerOptions={{ required: "Title is required" }}
+              error={errors.blogTitle}
+              isFeedbackRequired={true}
             />
-            <TextInputField 
-            label="Content"
-            name="blogContent"
-            type="text"
-            placeholder="Enter content for the blog"
-            register={register}
-            error={errors.blogContent}
-            isFeedbackRequired = {true}
-            as={"textarea"}
-            rows = {8}
+            <TextInputField
+              label="Content"
+              name="blogContent"
+              type="text"
+              placeholder="Enter content for the blog"
+              register={register}
+              error={errors.blogContent}
+              isFeedbackRequired={true}
+              as={"textarea"}
+              rows={8}
             />
-            <Button type="submit" disabled={isSubmitting} className='mt-2'>Add</Button>
+            <Button type="submit" disabled={isSubmitting} className="mt-2">
+              {blogToEdit ? "Update" : "Add"}
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default AddEditBlogModal
+export default AddEditBlogModal;

@@ -1,7 +1,7 @@
 import { CommentModel } from "./commentModel";
 
 export interface BlogModel{
-    _id? : string,
+    _id : string,
     userId : string,
     blogTitle : string,
     blogContent : string,

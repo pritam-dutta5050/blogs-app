@@ -126,6 +126,19 @@ export async function addBlog(blogBody: BlogInterface): Promise<BlogModel> {
   });
   return response.json();
 }
+export async function updateBlog(blogBody: BlogInterface, blogId: string): Promise<BlogModel> {
+  const response = await fetchData("api/blogs/" + blogId, {
+    method: "PATCH",
+    body: JSON.stringify(blogBody),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.json();
+}
+export async function deleteBlog( blogId : string) {
+  await fetchData("api/blogs/" + blogId, {method: "DELETE"});
+}
 export async function likeBlog(blogId: string | undefined): Promise<BlogModel> {
   const response = await fetchData("/api/blogs/like/" + blogId, {
     method: "POST",
