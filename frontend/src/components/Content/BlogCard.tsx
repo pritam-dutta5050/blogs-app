@@ -35,7 +35,7 @@ const BlogCard = ({ blog, loggedInuserId, onDeleteButtonClicked, onEditButtonCli
     setCurrentBlog(blog)
   }, [blog]);
 
-  
+  console.log("BlogCard component rendered");
   
   return (
     <div>

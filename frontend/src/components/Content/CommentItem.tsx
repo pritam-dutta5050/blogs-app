@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { CommentModel } from "../../models/commentModel";
-import { Button, Card, Col, Row } from "react-bootstrap";
-import { UserModel } from "../../models/UserModel";
-import * as BlogsApi from "../../network/blogs_api";
-import { MdDelete, MdEdit } from "react-icons/md";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useState } from "react";
+import { Button, Card, Col, Row } from "react-bootstrap";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { UserModel } from "../../models/UserModel";
+import { CommentModel } from "../../models/commentModel";
+import * as BlogsApi from "../../network/blogs_api";
 
 interface CommentItemProps {
   comment: CommentModel;
@@ -28,7 +28,9 @@ const CommentItem = ({
       setCommentUser(user);
     }
     getUserById(comment.commentBy);
-  }, []);
+  }, [comment]);
+
+  console.log("CommentItem component rendered");
 
   return (
     <Card className="mb-1 p-0">

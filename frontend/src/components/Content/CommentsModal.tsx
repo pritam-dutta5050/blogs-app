@@ -73,6 +73,7 @@ const CommentsModal = ({
     }
   }
 
+  console.log("CommentsModal component rendered");
   
   return (
     <Modal show onHide={onDismiss}>

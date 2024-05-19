@@ -15,6 +15,7 @@ function App() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  console.log("App component rendered");
   useEffect(() => {
     async function fetchLoggedinUser() {
       try {

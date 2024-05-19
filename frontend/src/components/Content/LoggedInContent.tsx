@@ -8,6 +8,7 @@ import BlogCard from "./BlogCard";
 interface loggedInContentProps {
   userId: string;
 }
+
 const LoggedInContent = ({ userId }: loggedInContentProps) => {
   const [blogs, setBlogs] = useState<BlogModel[]>([]);
   const [notesLoading, setNotesLoading] = useState(true);
@@ -15,7 +16,7 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
   const [showAddEditBlogModal, setShowAddEditBlogModal] = useState(false);
   const [blogToEdit, setBlogToEdit] = useState<BlogModel | null>(null);
 
-  console.log("Rendering content");
+  console.log("LoggedInComponent rendered");
   console.log(blogs);
 
   async function loadNotes() {
@@ -23,7 +24,7 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
       setNotesLoading(true);
       const blogsBuffer = await BlogsApi.fetchBlogs();
       setBlogs(blogsBuffer);
-      console.log("I not rendered yet");
+      // console.log("I not rendered yet");
     } catch (error) {
       setShowNoteLoadingError(true);
       console.error(error);
@@ -108,6 +109,7 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
           }}
         />
       )}
+
       {blogs.map((blog: BlogModel) => (
         <BlogCard
           blog={blog}

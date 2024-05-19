@@ -39,6 +39,8 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalInterface) => {
       console.error(error);
     }
   }
+
+  console.log("LoginModal component rendered");
   return (
     <div>
       <Modal show onHide={onDismiss}>

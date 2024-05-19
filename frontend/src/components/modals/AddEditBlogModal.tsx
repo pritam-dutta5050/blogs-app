@@ -50,6 +50,7 @@ const AddEditBlogModal = ({
     }
   }
 
+  console.log("AddEditBlogModal component rendered");
   return (
     <div>
       <Modal show onHide={onDismiss}>

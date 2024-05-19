@@ -41,6 +41,7 @@ const SignupModal = ({ onDismiss, onSignupSuccessful }: SignupModalInterface) =>
       }
     }
   }
+  console.log("SignupModal component rendered");
   return (
     <div>
       <Modal show onHide={onDismiss}>
