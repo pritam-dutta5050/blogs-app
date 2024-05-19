@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
+import { BlogInterface } from "../../interfaces/BlogInterface";
 import { BlogModel } from "../../models/BlogModel";
 import * as BlogsApi from "../../network/blogs_api";
 import AddEditBlogModal from "../modals/AddEditBlogModal";
@@ -16,6 +17,9 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
   const [showAddEditBlogModal, setShowAddEditBlogModal] = useState(false);
   const [blogToEdit, setBlogToEdit] = useState<BlogModel | null>(null);
 
+
+
+
   console.log("LoggedInComponent rendered");
   console.log(blogs);
 
@@ -24,7 +28,6 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
       setNotesLoading(true);
       const blogsBuffer = await BlogsApi.fetchBlogs();
       setBlogs(blogsBuffer);
-      // console.log("I not rendered yet");
     } catch (error) {
       setShowNoteLoadingError(true);
       console.error(error);
@@ -47,27 +50,27 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
       alert(error);
     }
   }
-  // async function onSubmitClickHandler(blogBody: BlogInterface) {
-  //   try {
-  //     let responseBlog: BlogModel;
-  //     if (!blogToEdit) {
-  //       responseBlog = await BlogsApi.addBlog(blogBody);
-  //       setBlogs([responseBlog, ...blogs]);
-  //       setShowAddEditBlogModal(false);
-  //     } else {
-  //       responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
-  //       setBlogs(
-  //         blogs.map((existingBlog) =>
-  //           existingBlog._id === responseBlog._id ? responseBlog : existingBlog
-  //         )
-  //       );
-  //       setBlogToEdit(null);
-  //     }
-  //   } catch (error) {
-  //     alert(error);
-  //     console.error(error);
-  //   }
-  // }
+  async function onSubmitClickHandler(blogBody: BlogInterface) {
+    try {
+      let responseBlog: BlogModel;
+      if (!blogToEdit) {
+        responseBlog = await BlogsApi.addBlog(blogBody);
+        setBlogs([responseBlog, ...blogs]);
+        setShowAddEditBlogModal(false);
+      } else {
+        responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
+        setBlogs(
+          blogs.map((existingBlog) =>
+            existingBlog._id === responseBlog._id ? responseBlog : existingBlog
+          )
+        );
+        setBlogToEdit(null);
+      }
+    } catch (error) {
+      alert(error);
+      console.error(error);
+    }
+  }
 
   return (
     <Container>
@@ -87,26 +90,14 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
         <AddEditBlogModal
           onDismiss={() => setBlogToEdit(null)}
           blogToEdit={blogToEdit}
-          onBlogSaved={(updatedBlog: BlogModel) => {
-            setBlogs(
-              blogs.map((existingBlog) =>
-                existingBlog._id === updatedBlog._id
-                  ? updatedBlog
-                  : existingBlog
-              )
-            );
-            setBlogToEdit(null);
-          }}
+          onSubmitButtonPressed={onSubmitClickHandler}
         />
       )}
 
       {showAddEditBlogModal && (
         <AddEditBlogModal
           onDismiss={() => setShowAddEditBlogModal(false)}
-          onBlogSaved={(blog) => {
-            setBlogs([blog, ...blogs]);
-            setShowAddEditBlogModal(false);
-          }}
+          onSubmitButtonPressed={onSubmitClickHandler}
         />
       )}
 

@@ -1,24 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import TextInputField from "../form/TextInputField";
 import { useForm } from "react-hook-form";
 import { BlogInterface } from "../../interfaces/BlogInterface";
-import * as BlogsApi from "../../network/blogs_api";
 import { BlogModel } from "../../models/BlogModel";
-import { UnauthorizedError } from "../../errors/httperrors";
+import TextInputField from "../form/TextInputField";
 
 interface AddEditBlogModalProps {
   onDismiss: () => void;
-  onBlogSaved: (responseBlog: BlogModel) => void;
+  onSubmitButtonPressed: (blogBody: BlogInterface) => void;
   blogToEdit?: BlogModel | null;
 }
 
 const AddEditBlogModal = ({
   onDismiss,
-  onBlogSaved,
+  onSubmitButtonPressed,
   blogToEdit,
 }: AddEditBlogModalProps) => {
-  const [errorText, setErrorText] = useState<string | null>(null);
+  // const [errorText, setErrorText] = useState<string | null>(null);
 
   const {
     register,
@@ -31,23 +29,8 @@ const AddEditBlogModal = ({
     },
   });
 
-  async function onSubmit(blogBody: BlogInterface) {
-    try {
-      let responseBlog: BlogModel;
-      if (!blogToEdit) {
-        responseBlog = await BlogsApi.addBlog(blogBody);
-      } else {
-        responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
-      }
-      onBlogSaved(responseBlog);
-    } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        setErrorText(error.message);
-      } else {
-        alert(error);
-      }
-      console.error(error);
-    }
+  function onSubmit(blogBody: BlogInterface) {
+    onSubmitButtonPressed(blogBody);
   }
 
   console.log("AddEditBlogModal component rendered");
@@ -58,7 +41,7 @@ const AddEditBlogModal = ({
           <Modal.Title>{blogToEdit ? "Update Blog" : "Add Blog"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {errorText && <Alert variant="danger">{errorText}</Alert>}
+          {/* {errorText && <Alert variant="danger">{errorText}</Alert>} */}
           <Form onSubmit={handleSubmit(onSubmit)}>
             <TextInputField
               label="Title"
