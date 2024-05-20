@@ -5,6 +5,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { UserModel } from "../../models/UserModel";
 import { CommentModel } from "../../models/commentModel";
 import * as BlogsApi from "../../network/blogs_api";
+import { formatDate } from "../../utils/formatDate";
 
 interface CommentItemProps {
   comment: CommentModel;
@@ -33,7 +34,7 @@ const CommentItem = ({
   console.log("CommentItem component rendered");
 
   return (
-    <Card className="mb-1 p-0">
+    commentUser && <Card className="mb-1 p-0">
       <Row>
         <Col>
           <Card.Title as={"h6"} className="w-auto ms-1 mt-1">
