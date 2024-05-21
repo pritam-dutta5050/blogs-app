@@ -82,29 +82,7 @@ const CommentsModal = ({
         <Modal.Title>Comments</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {currentComments.length > 0 ? (
-          currentComments.map((comment) => (
-            <CommentItem
-              comment={comment}
-              key={comment._id}
-              blogUserId={blog.userId}
-              loggedInUserId={loggedInUserId}
-              deleteComment={() => {
-                deleteComment(comment._id, blog._id ? blog._id : "");
-              }}
-              editComment={() => {
-                setIsAdding(false);
-                setValue("commentText", comment.commentText);
-                setCommentId(comment._id);
-              }}
-            />
-          ))
-        ) : (
-          <div className="text-center">No comments yet</div>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Form onSubmit={handleSubmit(onSubmit)} className="w-100">
+      <Form onSubmit={handleSubmit(onSubmit)} className="w-100">
           <Row className="m-1">
             <Col xs={9} className="m-0">
               <TextInputField
@@ -131,6 +109,29 @@ const CommentsModal = ({
             </Col>
           </Row>
         </Form>
+        {currentComments.length > 0 ? (
+          currentComments.map((comment) => (
+            <CommentItem
+              comment={comment}
+              key={comment._id}
+              blogUserId={blog.userId}
+              loggedInUserId={loggedInUserId}
+              deleteComment={() => {
+                deleteComment(comment._id, blog._id ? blog._id : "");
+              }}
+              editComment={() => {
+                setIsAdding(false);
+                setValue("commentText", comment.commentText);
+                setCommentId(comment._id);
+              }}
+            />
+          ))
+        ) : (
+          <div className="text-center">No comments yet</div>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        
       </Modal.Footer>
     </Modal>
   );
