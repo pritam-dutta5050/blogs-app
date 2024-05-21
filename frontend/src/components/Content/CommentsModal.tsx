@@ -7,6 +7,7 @@ import { useState } from "react";
 import * as BlogsApi from "../../network/blogs_api";
 import { CommentInterface } from "../../interfaces/CommentInterface";
 import { BlogModel } from "../../models/BlogModel";
+import styles from "./CommentsModal.module.css";
 
 interface CommentsModalProps {
   blog: BlogModel;

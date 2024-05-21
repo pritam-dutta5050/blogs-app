@@ -7,23 +7,38 @@ import * as BlogsApi from "../../network/blogs_api";
 import CommentsModal from "./CommentsModal";
 import styles from "./BlogCard.module.css";
 import { formatDate } from "../../utils/formatDate";
-import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
+import { HttpError } from "http-errors";
+ 
 
 interface BlogCardProps {
   blog: BlogModel;
   loggedInuserId: string;
-  onDeleteButtonClicked : () => void;
-  onEditButtonClicked : () => void;
+  onDeleteButtonClicked: () => void;
+  onEditButtonClicked: () => void;
 }
 
-const BlogCard = ({ blog, loggedInuserId, onDeleteButtonClicked, onEditButtonClicked }: BlogCardProps) => {
+const BlogCard = ({
+  blog,
+  loggedInuserId,
+  onDeleteButtonClicked,
+  onEditButtonClicked,
+}: BlogCardProps) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
 
   async function likeBlog(blogId: string) {
-    const blog = await BlogsApi.likeBlog(blogId);
-    setCurrentBlog(blog);
+    try {
+      const blog = await BlogsApi.likeBlog(blogId);
+      setCurrentBlog(blog);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        alert(error.message);
+      } else {
+        alert(error + "I am here");
+      }
+    }
   }
 
   async function getUserById(userId: string) {
@@ -32,11 +47,11 @@ const BlogCard = ({ blog, loggedInuserId, onDeleteButtonClicked, onEditButtonCli
   }
   useEffect(() => {
     getUserById(blog.userId);
-    setCurrentBlog(blog)
+    setCurrentBlog(blog);
   }, [blog]);
 
   console.log("BlogCard component rendered");
-  
+
   return (
     <div>
       <Card className={`${styles.blogCard}`}>
@@ -50,11 +65,19 @@ const BlogCard = ({ blog, loggedInuserId, onDeleteButtonClicked, onEditButtonCli
           </div>
           {blog.userId === loggedInuserId && (
             <div className={`${styles.headerButtons}`}>
-              <Button variant="info" className={`${styles.headerButton}`} onClick={onEditButtonClicked}>
+              <Button
+                variant="info"
+                className={`${styles.headerButton}`}
+                onClick={onEditButtonClicked}
+              >
                 <MdEdit />
               </Button>
 
-              <Button variant="danger" className={`${styles.headerButton}`} onClick={onDeleteButtonClicked}>
+              <Button
+                variant="danger"
+                className={`${styles.headerButton}`}
+                onClick={onDeleteButtonClicked}
+              >
                 <MdDelete />
               </Button>
             </div>

@@ -35,21 +35,17 @@ function App() {
         onSignupClicked={() => setShowSignupModal(true)}
         onLoginClicked={() => setShowLoginModal(true)}
         loggedinUser={loggedinUser}
-        onLogoutSuccessful={()=> setLoggedinUser(null)}
+        onLogoutSuccessful={() => setLoggedinUser(null)}
       />
-      <Row>
-        {/* <Col xs={"auto"} className="h-100">
-          <div>I am left bar</div>
-        </Col> */}
-        <Col xs={8} className="m-auto">
-          <Container>
-            {loggedinUser && loggedinUser._id ? <LoggedInContent userId={loggedinUser._id} /> : <LoggedOutContent />}
-          </Container>
-        </Col>
-        {/* <Col xs={"auto"}>
-          <div>I am right bar</div>
-        </Col> */}
-      </Row>
+
+      <div className="m-auto">
+        {loggedinUser && loggedinUser._id ? (
+          <LoggedInContent userId={loggedinUser._id} />
+        ) : (
+          <LoggedOutContent />
+        )}
+      </div>
+
       {showSignupModal && (
         <SignupModal
           onDismiss={() => setShowSignupModal(false)}

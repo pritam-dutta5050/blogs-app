@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { BlogInterface } from "../../interfaces/BlogInterface";
 import { BlogModel } from "../../models/BlogModel";
 import TextInputField from "../form/TextInputField";
+import styles from "./AddEditBlogModal.module.css";
 
 interface AddEditBlogModalProps {
   onDismiss: () => void;

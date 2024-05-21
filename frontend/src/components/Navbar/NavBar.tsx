@@ -2,6 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import NavBarLoggedinView from "./NavBarLoggedinView";
 import NavBarLoggedOutView from "./NavBarLoogedOutView";
 import { UserModel } from "../../models/UserModel";
+import styles from "./NavBar.module.css";
 
 interface NavBarProps{
   onSignupClicked:()=> void;
@@ -18,7 +19,7 @@ const NavBar = ({onSignupClicked, onLoginClicked, loggedinUser, onLogoutSuccessf
   // const isLoggedIn = false;
 
   return (
-    <Navbar bg="primary" variant="dark" expand="sm" sticky="top">
+    <Navbar bg="primary" variant="dark" expand="sm" sticky="top" className={styles.navbar}>
       <Container>
         <Navbar.Brand href="#home">Blog App</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -5,6 +5,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { UserModel } from "../../models/UserModel";
 import { CommentModel } from "../../models/commentModel";
 import * as BlogsApi from "../../network/blogs_api";
+import styles from "./CommentItem.module.css";
 
 interface CommentItemProps {
   comment: CommentModel;

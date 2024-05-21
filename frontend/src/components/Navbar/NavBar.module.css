@@ -1,0 +1,15 @@
+@media (min-width: 1280px) {
+    .navbar{
+        background-color: rgb(231, 164, 77);
+    }
+}
+@media (min-width: 601px) and (max-width:1279px) {
+    .navbar{
+        background-color: rgb(139, 231, 77);
+    }
+}
+@media (max-width:600px) {
+    .navbar{
+        background-color: rgb(77, 231, 226);
+    }
+}

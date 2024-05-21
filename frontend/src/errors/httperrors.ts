@@ -14,3 +14,9 @@ export class UnauthorizedError extends HttpError{}
  * Status code : 409
  */
 export class ConflictError extends HttpError{}
+
+
+/**
+ * Status code : 404
+ */
+export class NotFoundError extends HttpError{}

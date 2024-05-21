@@ -5,6 +5,7 @@ import { BlogModel } from "../../models/BlogModel";
 import * as BlogsApi from "../../network/blogs_api";
 import AddEditBlogModal from "../modals/AddEditBlogModal";
 import BlogCard from "./BlogCard";
+import styles from "./LoggedInContent.module.css";
 
 interface loggedInContentProps {
   userId: string;
@@ -73,7 +74,7 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
   }
 
   return (
-    <Container>
+    <Container className={styles.mainContainer}>
       {notesLoading && <Spinner animation="border" variant="primary" />}
       {showNoteLoadingError && <p>Something went wrong</p>}
       <center>

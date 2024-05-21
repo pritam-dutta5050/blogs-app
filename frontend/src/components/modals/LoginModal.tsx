@@ -6,6 +6,7 @@ import { UserModel } from "../../models/UserModel";
 import { UnauthorizedError } from "../../errors/httperrors";
 import { useState } from "react";
 import * as BlogsApi from "../../network/blogs_api";
+import styles from "./LoginModal.module.css";
 
 interface LoginModalInterface {
   onDismiss: () => void;

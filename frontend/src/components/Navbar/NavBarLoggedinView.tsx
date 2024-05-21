@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Navbar } from "react-bootstrap";
 import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
+import styles from "./NavBarLoggedinView.module.css";
 
 interface LoggedInViewProps{
   User: UserModel,
