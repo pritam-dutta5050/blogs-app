@@ -1,25 +1,31 @@
+import { useContext } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { LoggedinUserContext } from "../../store/loggedInUser-store";
+import styles from "./NavBar.module.css";
 import NavBarLoggedinView from "./NavBarLoggedinView";
 import NavBarLoggedOutView from "./NavBarLoogedOutView";
-import { UserModel } from "../../models/UserModel";
-import styles from "./NavBar.module.css";
 
-interface NavBarProps{
-  onSignupClicked:()=> void;
-  onLoginClicked:()=> void;
-  loggedinUser: UserModel | null;
-  onLogoutSuccessful: ()=> void;
+interface NavBarProps {
+  onSignupClicked: () => void;
+  onLoginClicked: () => void;
+  onLogoutSuccessful: () => void;
 }
 
-const NavBar = ({onSignupClicked, onLoginClicked, loggedinUser, onLogoutSuccessful}: NavBarProps) => {
-
-  /**
-   * TODO: To be used with actual loggedin data
-   */
-  // const isLoggedIn = false;
+const NavBar = ({
+  onSignupClicked,
+  onLoginClicked,
+  onLogoutSuccessful,
+}: NavBarProps) => {
+  const loggedinUserFromContext = useContext(LoggedinUserContext);
 
   return (
-    <Navbar bg="primary" variant="dark" expand="sm" sticky="top" className={styles.navbar}>
+    <Navbar
+      bg="primary"
+      variant="dark"
+      expand="sm"
+      sticky="top"
+      className={styles.navbar}
+    >
       <Container>
         <Navbar.Brand href="#home">Blog App</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -29,10 +35,17 @@ const NavBar = ({onSignupClicked, onLoginClicked, loggedinUser, onLogoutSuccessf
             <Nav.Link href="#link">Link</Nav.Link>
           </Nav>
           <Nav className="ms-auto">
-            {loggedinUser ? 
-            <NavBarLoggedinView User={loggedinUser} onLogoutSuccessful={onLogoutSuccessful}/> : 
-            <NavBarLoggedOutView onSignupClicked={onSignupClicked} onLoginClicked={onLoginClicked}/>
-            }
+            {loggedinUserFromContext ? (
+              <NavBarLoggedinView
+                User={loggedinUserFromContext}
+                onLogoutSuccessful={onLogoutSuccessful}
+              />
+            ) : (
+              <NavBarLoggedOutView
+                onSignupClicked={onSignupClicked}
+                onLoginClicked={onLoginClicked}
+              />
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -1,27 +1,26 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { UserModel } from "../../models/UserModel";
 import { CommentModel } from "../../models/commentModel";
 import * as BlogsApi from "../../network/blogs_api";
-import styles from "./CommentItem.module.css";
+import { LoggedinUserContext } from "../../store/loggedInUser-store";
 
 interface CommentItemProps {
   comment: CommentModel;
-  loggedInUserId: string;
   blogUserId: string;
   deleteComment: () => void;
   editComment: () => void;
 }
 const CommentItem = ({
   comment,
-  loggedInUserId,
   blogUserId,
   deleteComment,
   editComment,
 }: CommentItemProps) => {
   const [commentUser, setCommentUser] = useState<UserModel | null>(null);
+  const loggedInUserId = useContext(LoggedinUserContext)?._id;
 
   useEffect(() => {
     async function getUserById(userId: string) {

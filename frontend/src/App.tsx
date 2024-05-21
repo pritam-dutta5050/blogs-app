@@ -1,14 +1,14 @@
 // import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useState } from "react";
 import LoggedInContent from "./components/Content/LoggedInContent";
 import LoggedOutContent from "./components/Content/LoggedOutContent";
 import NavBar from "./components/Navbar/NavBar";
-import { Col, Container, Row } from "react-bootstrap";
-import SignupModal from "./components/modals/SignupModal";
-import { useEffect, useState } from "react";
 import LoginModal from "./components/modals/LoginModal";
+import SignupModal from "./components/modals/SignupModal";
 import { UserModel } from "./models/UserModel";
 import * as BlogsApi from "./network/blogs_api";
+import { LoggedinUserContext } from "./store/loggedInUser-store";
 
 function App() {
   const [loggedinUser, setLoggedinUser] = useState<UserModel | null>(null);
@@ -31,39 +31,40 @@ function App() {
 
   return (
     <>
-      <NavBar
-        onSignupClicked={() => setShowSignupModal(true)}
-        onLoginClicked={() => setShowLoginModal(true)}
-        loggedinUser={loggedinUser}
-        onLogoutSuccessful={() => setLoggedinUser(null)}
-      />
+      <LoggedinUserContext.Provider value={loggedinUser}>
+        <NavBar
+          onSignupClicked={() => setShowSignupModal(true)}
+          onLoginClicked={() => setShowLoginModal(true)}
+          onLogoutSuccessful={() => setLoggedinUser(null)}
+        />
 
-      <div className="m-auto">
-        {loggedinUser && loggedinUser._id ? (
-          <LoggedInContent userId={loggedinUser._id} />
-        ) : (
-          <LoggedOutContent />
+        <div className="m-auto">
+          {loggedinUser && loggedinUser._id ? (
+            <LoggedInContent />
+          ) : (
+            <LoggedOutContent />
+          )}
+        </div>
+
+        {showSignupModal && (
+          <SignupModal
+            onDismiss={() => setShowSignupModal(false)}
+            onSignupSuccessful={(user) => {
+              setLoggedinUser(user);
+              setShowSignupModal(false);
+            }}
+          />
         )}
-      </div>
-
-      {showSignupModal && (
-        <SignupModal
-          onDismiss={() => setShowSignupModal(false)}
-          onSignupSuccessful={(user) => {
-            setLoggedinUser(user);
-            setShowSignupModal(false);
-          }}
-        />
-      )}
-      {showLoginModal && (
-        <LoginModal
-          onDismiss={() => setShowLoginModal(false)}
-          onLoginSuccessful={(user) => {
-            setLoggedinUser(user);
-            setShowLoginModal(false);
-          }}
-        />
-      )}
+        {showLoginModal && (
+          <LoginModal
+            onDismiss={() => setShowLoginModal(false)}
+            onLoginSuccessful={(user) => {
+              setLoggedinUser(user);
+              setShowLoginModal(false);
+            }}
+          />
+        )}
+      </LoggedinUserContext.Provider>
     </>
   );
 }

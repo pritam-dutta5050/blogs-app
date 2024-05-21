@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { MdDelete, MdEdit, MdMessage, MdThumbUp } from "react-icons/md";
 import { BlogModel } from "../../models/BlogModel";
@@ -9,24 +9,24 @@ import styles from "./BlogCard.module.css";
 import { formatDate } from "../../utils/formatDate";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { HttpError } from "http-errors";
- 
+import { LoggedinUserContext } from "../../store/loggedInUser-store";
 
 interface BlogCardProps {
   blog: BlogModel;
-  loggedInuserId: string;
   onDeleteButtonClicked: () => void;
   onEditButtonClicked: () => void;
 }
 
 const BlogCard = ({
   blog,
-  loggedInuserId,
   onDeleteButtonClicked,
   onEditButtonClicked,
 }: BlogCardProps) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
+
+  const loggedInuserId = useContext(LoggedinUserContext)?._id;
 
   async function likeBlog(blogId: string) {
     try {
@@ -129,7 +129,6 @@ const BlogCard = ({
           comments={currentBlog.comments}
           onDismiss={() => setShowCommentModal(false)}
           onCommentsModified={(updatedBlog) => setCurrentBlog(updatedBlog)}
-          loggedInUserId={loggedInuserId}
         />
       )}
     </div>

@@ -7,19 +7,12 @@ import AddEditBlogModal from "../modals/AddEditBlogModal";
 import BlogCard from "./BlogCard";
 import styles from "./LoggedInContent.module.css";
 
-interface loggedInContentProps {
-  userId: string;
-}
-
-const LoggedInContent = ({ userId }: loggedInContentProps) => {
+const LoggedInContent = () => {
   const [blogs, setBlogs] = useState<BlogModel[]>([]);
   const [notesLoading, setNotesLoading] = useState(true);
   const [showNoteLoadingError, setShowNoteLoadingError] = useState(false);
   const [showAddEditBlogModal, setShowAddEditBlogModal] = useState(false);
   const [blogToEdit, setBlogToEdit] = useState<BlogModel | null>(null);
-
-
-
 
   console.log("LoggedInComponent rendered");
   console.log(blogs);
@@ -106,7 +99,6 @@ const LoggedInContent = ({ userId }: loggedInContentProps) => {
         <BlogCard
           blog={blog}
           key={blog._id}
-          loggedInuserId={userId}
           onDeleteButtonClicked={() => deleteBlog(blog._id ? blog._id : "")}
           onEditButtonClicked={() => {
             setBlogToEdit(blog);

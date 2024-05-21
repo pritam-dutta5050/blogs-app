@@ -1,20 +1,18 @@
+import { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { CommentModel } from "../../models/commentModel";
-import TextInputField from "../form/TextInputField";
-import CommentItem from "./CommentItem";
-import { useState } from "react";
-import * as BlogsApi from "../../network/blogs_api";
 import { CommentInterface } from "../../interfaces/CommentInterface";
 import { BlogModel } from "../../models/BlogModel";
-import styles from "./CommentsModal.module.css";
+import { CommentModel } from "../../models/commentModel";
+import * as BlogsApi from "../../network/blogs_api";
+import TextInputField from "../form/TextInputField";
+import CommentItem from "./CommentItem";
 
 interface CommentsModalProps {
   blog: BlogModel;
   comments: CommentModel[];
   onDismiss: () => void;
   onCommentsModified: (updatedBlog: BlogModel) => void;
-  loggedInUserId: string;
 }
 
 const CommentsModal = ({
@@ -22,22 +20,25 @@ const CommentsModal = ({
   comments,
   onDismiss,
   onCommentsModified,
-  loggedInUserId,
 }: CommentsModalProps) => {
-
-  const [currentComments, setCurrentComments] = useState<CommentModel[]>(comments);
+  const [currentComments, setCurrentComments] =
+    useState<CommentModel[]>(comments);
   const [isAdding, setIsAdding] = useState(true);
   const [commentId, setCommentId] = useState("");
 
-  const { register, handleSubmit, formState: { isSubmitting, errors }, setValue, } = useForm<CommentInterface>();
-  
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+    setValue,
+  } = useForm<CommentInterface>();
+
   async function onSubmit(commentBody: CommentInterface) {
     if (isAdding) {
       console.log(JSON.stringify(commentBody));
       await addComment(commentBody, blog._id ? blog._id : "");
     } else {
       commentBody.commentId = commentId;
-      // console.log(JSON.stringify(commentBody));
       await editComment(commentBody, blog._id ? blog._id : "");
     }
   }
@@ -75,14 +76,14 @@ const CommentsModal = ({
   }
 
   console.log("CommentsModal component rendered");
-  
+
   return (
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
         <Modal.Title>Comments</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Form onSubmit={handleSubmit(onSubmit)} className="w-100">
+        <Form onSubmit={handleSubmit(onSubmit)} className="w-100">
           <Row className="m-1">
             <Col xs={9} className="m-0">
               <TextInputField
@@ -115,7 +116,6 @@ const CommentsModal = ({
               comment={comment}
               key={comment._id}
               blogUserId={blog.userId}
-              loggedInUserId={loggedInUserId}
               deleteComment={() => {
                 deleteComment(comment._id, blog._id ? blog._id : "");
               }}
@@ -130,9 +130,6 @@ const CommentsModal = ({
           <div className="text-center">No comments yet</div>
         )}
       </Modal.Body>
-      <Modal.Footer>
-        
-      </Modal.Footer>
     </Modal>
   );
 };
