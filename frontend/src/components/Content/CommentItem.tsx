@@ -20,7 +20,7 @@ const CommentItem = ({
   editComment,
 }: CommentItemProps) => {
   const [commentUser, setCommentUser] = useState<UserModel | null>(null);
-  const loggedInUserId = useContext(LoggedinUserContext)?._id;
+  const loggedInUserId = useContext(LoggedinUserContext).userData?._id;
 
   useEffect(() => {
     async function getUserById(userId: string) {

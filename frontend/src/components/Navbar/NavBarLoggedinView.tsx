@@ -1,14 +1,15 @@
-import React from "react";
+import { useContext } from "react";
 import { Button, Navbar } from "react-bootstrap";
-import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
-import styles from "./NavBarLoggedinView.module.css";
+import { LoggedinUserContext } from "../../store/loggedInUser-store";
 
 interface LoggedInViewProps{
-  User: UserModel,
   onLogoutSuccessful: () => void,
 }
-const NavBarLoggedinView = ({User, onLogoutSuccessful}:LoggedInViewProps) => {
+const NavBarLoggedinView = ({onLogoutSuccessful}:LoggedInViewProps) => {
+
+  const loggedinUserFromContext = useContext(LoggedinUserContext).userData;
+
   async function logout() {
     try {
         await BlogsApi.logoutUser();
@@ -20,7 +21,7 @@ const NavBarLoggedinView = ({User, onLogoutSuccessful}:LoggedInViewProps) => {
 }
   return (
     <>
-      <Navbar.Text className="me-2">Logged in as : {User.firstName} {User.lastName}</Navbar.Text>
+      <Navbar.Text className="me-2">Logged in as : {loggedinUserFromContext?.firstName} {loggedinUserFromContext?.lastName}</Navbar.Text>
       <Button onClick={logout}>Logout</Button>
     </>
   );

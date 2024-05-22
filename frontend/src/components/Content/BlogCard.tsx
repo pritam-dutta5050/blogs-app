@@ -26,7 +26,7 @@ const BlogCard = ({
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
 
-  const loggedInuserId = useContext(LoggedinUserContext)?._id;
+  const loggedInuserId = useContext(LoggedinUserContext).userData?._id;
 
   async function likeBlog(blogId: string) {
     try {

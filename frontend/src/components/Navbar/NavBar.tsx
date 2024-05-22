@@ -16,7 +16,8 @@ const NavBar = ({
   onLoginClicked,
   onLogoutSuccessful,
 }: NavBarProps) => {
-  const loggedinUserFromContext = useContext(LoggedinUserContext);
+
+  const loggedinUserFromContext = useContext(LoggedinUserContext).userData;
 
   return (
     <Navbar
@@ -37,7 +38,6 @@ const NavBar = ({
           <Nav className="ms-auto">
             {loggedinUserFromContext ? (
               <NavBarLoggedinView
-                User={loggedinUserFromContext}
                 onLogoutSuccessful={onLogoutSuccessful}
               />
             ) : (

@@ -31,7 +31,7 @@ function App() {
 
   return (
     <>
-      <LoggedinUserContext.Provider value={loggedinUser}>
+      <LoggedinUserContext.Provider value={{userData: loggedinUser}}>
         <NavBar
           onSignupClicked={() => setShowSignupModal(true)}
           onLoginClicked={() => setShowLoginModal(true)}
