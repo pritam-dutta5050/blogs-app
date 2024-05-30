@@ -1,7 +1,7 @@
 .blogCard{
     background-color: rgb(170, 241, 238);
     
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .cardHeader {
@@ -26,4 +26,7 @@
     font-size: 16px;
     height: 100%;
     
+}
+.cross{
+  font-size: 16px;
 }

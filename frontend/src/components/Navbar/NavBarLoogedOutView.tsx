@@ -1,19 +1,31 @@
-import React from 'react'
-import { Button } from 'react-bootstrap'
-import styles from "./NavBarLoggedOutView.module.css";
 
-interface NavBarLoggedOutViewProps{
-  onSignupClicked: ()=>void;
-  onLoginClicked: ()=>void;
+interface NavBarLoggedOutViewProps {
+  onSignupClicked: () => void;
+  onLoginClicked: () => void;
 }
 
-const NavBarLoogedOutView = ({onSignupClicked, onLoginClicked}: NavBarLoggedOutViewProps) => {
+const NavBarLoogedOutView = ({
+  onSignupClicked,
+  onLoginClicked,
+}: NavBarLoggedOutViewProps) => {
   return (
     <>
-        <Button onClick={onSignupClicked}>Signup</Button>
-        <Button onClick={onLoginClicked}>Login</Button>
+      <button
+        type="button"
+        className="btn btn-outline-light me-2"
+        onClick={onLoginClicked}
+      >
+        Login
+      </button>
+      <button
+        type="button"
+        className="btn btn-warning"
+        onClick={onSignupClicked}
+      >
+        Sign-up
+      </button>
     </>
-  )
-}
+  );
+};
 
-export default NavBarLoogedOutView
+export default NavBarLoogedOutView;

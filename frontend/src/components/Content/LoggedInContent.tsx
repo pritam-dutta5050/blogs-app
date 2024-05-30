@@ -44,6 +44,9 @@ const LoggedInContent = () => {
       alert(error);
     }
   }
+  function hideBlog(blogId: string) {
+    setBlogs(blogs.filter((blog) => blog._id !== blogId));
+  }
   async function onSubmitClickHandler(blogBody: BlogInterface) {
     try {
       let responseBlog: BlogModel;
@@ -103,6 +106,7 @@ const LoggedInContent = () => {
           onEditButtonClicked={() => {
             setBlogToEdit(blog);
           }}
+          onHideButtonClicked={() => hideBlog(blog._id)}
         />
       ))}
     </Container>

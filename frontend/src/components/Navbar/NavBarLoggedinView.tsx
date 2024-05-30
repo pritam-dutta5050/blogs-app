@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Button, Navbar } from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
 import * as BlogsApi from "../../network/blogs_api";
 import { LoggedinUserContext } from "../../store/loggedInUser-store";
 
@@ -22,7 +22,14 @@ const NavBarLoggedinView = ({onLogoutSuccessful}:LoggedInViewProps) => {
   return (
     <>
       <Navbar.Text className="me-2">Logged in as : {loggedinUserFromContext?.firstName} {loggedinUserFromContext?.lastName}</Navbar.Text>
-      <Button onClick={logout}>Logout</Button>
+      {/* <Button onClick={logout}>Logout</Button> */}
+      <button
+        type="button"
+        className="btn btn-warning"
+        onClick={logout}
+      >
+        Logout
+      </button>
     </>
   );
 };

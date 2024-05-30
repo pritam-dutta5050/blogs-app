@@ -1,26 +1,37 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import { HttpError } from "http-errors";
 import { useContext, useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { MdDelete, MdEdit, MdMessage, MdThumbUp } from "react-icons/md";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Dropdown,
+  DropdownButton,
+  Row,
+} from "react-bootstrap";
+import { MdMessage, MdThumbUp } from "react-icons/md";
+import { RxCross1 } from "react-icons/rx";
 import { BlogModel } from "../../models/BlogModel";
 import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
-import CommentsModal from "./CommentsModal";
-import styles from "./BlogCard.module.css";
-import { formatDate } from "../../utils/formatDate";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { HttpError } from "http-errors";
 import { LoggedinUserContext } from "../../store/loggedInUser-store";
+import { formatDate } from "../../utils/formatDate";
+import styles from "./BlogCard.module.css";
+import CommentsModal from "./CommentsModal";
 
 interface BlogCardProps {
   blog: BlogModel;
   onDeleteButtonClicked: () => void;
   onEditButtonClicked: () => void;
+  onHideButtonClicked: () => void;
 }
 
 const BlogCard = ({
   blog,
   onDeleteButtonClicked,
   onEditButtonClicked,
+  onHideButtonClicked,
 }: BlogCardProps) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
@@ -55,6 +66,13 @@ const BlogCard = ({
   return (
     <div>
       <Card className={`${styles.blogCard}`}>
+        <span
+          className={`position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger ${styles.cross}`}
+          onClick={onHideButtonClicked}
+        >
+          <RxCross1/>
+        </span>
+
         <Card.Header as={"h5"} className={styles.cardHeader}>
           <div className={`${styles.blogUser}`}>
             {blogUser?.firstName} {blogUser?.lastName}
@@ -65,21 +83,14 @@ const BlogCard = ({
           </div>
           {blog.userId === loggedInuserId && (
             <div className={`${styles.headerButtons}`}>
-              <Button
-                variant="info"
-                className={`${styles.headerButton}`}
-                onClick={onEditButtonClicked}
-              >
-                <MdEdit />
-              </Button>
-
-              <Button
-                variant="danger"
-                className={`${styles.headerButton}`}
-                onClick={onDeleteButtonClicked}
-              >
-                <MdDelete />
-              </Button>
+              <DropdownButton id="dropdown-basic-button" title="Options">
+                <Dropdown.Item onClick={onEditButtonClicked}>
+                  Edit
+                </Dropdown.Item>
+                <Dropdown.Item onClick={onDeleteButtonClicked}>
+                  Delete
+                </Dropdown.Item>
+              </DropdownButton>
             </div>
           )}
         </Card.Header>
