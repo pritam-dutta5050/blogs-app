@@ -42,7 +42,7 @@ const NavBar = ({
                 <MdMenu />
               </li>
             )}
-        <Navbar.Brand href="#home">Blog App</Navbar.Brand>
+        {/* <Navbar.Brand href="#home">Blog App</Navbar.Brand> */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav>

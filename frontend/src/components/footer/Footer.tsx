@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Footer.module.css";
-import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
 const Footer = () => {
   return (
     <div className={`container ${styles.footerContainer}`}>
@@ -21,24 +21,31 @@ const Footer = () => {
 
         <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
           <li className="ms-3">
-            <a className="text-body-secondary" href="#">
+            <a className="text-body-secondary" href="https://www.twitter.com">
               <FaTwitter>
                 <use xlinkHref="#twitter"></use>
                 </FaTwitter>
             </a>
           </li>
           <li className="ms-3">
-            <a className="text-body-secondary" href="#">
+            <a className="text-body-secondary" href="https://www.instagram.com">
               <FaInstagram>
                 <use xlinkHref="#instagram"></use>
                 </FaInstagram>
             </a>
           </li>
           <li className="ms-3">
-            <a className="text-body-secondary" href="#">
+            <a className="text-body-secondary" href="https://www.facebook.com/profile.php?id=100094233086157">
               <FaFacebook>
                 <use xlinkHref="#facebook"></use>
                 </FaFacebook>
+            </a>
+          </li>
+          <li className="ms-3">
+            <a className="text-body-secondary" href="https://github.com/pritam-techietech">
+              <FaGithub>
+                <use xlinkHref="https://github.com/pritam-techietech"></use>
+                </FaGithub>
             </a>
           </li>
         </ul>

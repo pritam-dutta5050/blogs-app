@@ -1,66 +1,49 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
 import { BlogInterface } from "../../interfaces/BlogInterface";
 import { BlogModel } from "../../models/BlogModel";
 import * as BlogsApi from "../../network/blogs_api";
+import { BlogListContext } from "../../store/blog-list-store";
 import AddEditBlogModal from "../modals/AddEditBlogModal";
 import BlogCard from "./BlogCard";
 import styles from "./LoggedInContent.module.css";
 
 const LoggedInContent = () => {
-  const [blogs, setBlogs] = useState<BlogModel[]>([]);
-  const [notesLoading, setNotesLoading] = useState(true);
-  const [showNoteLoadingError, setShowNoteLoadingError] = useState(false);
+  // const [notesLoading, setNotesLoading] = useState(false);
+  // const [showNoteLoadingError, setShowNoteLoadingError] = useState(false);
   const [showAddEditBlogModal, setShowAddEditBlogModal] = useState(false);
   const [blogToEdit, setBlogToEdit] = useState<BlogModel | null>(null);
 
   console.log("LoggedInComponent rendered");
-  console.log(blogs);
+  // console.log(blogs);
+  
+  const {blogList, loadBlogs, addBlog, editBlog} = useContext(BlogListContext);
 
-  async function loadNotes() {
-    try {
-      setNotesLoading(true);
-      const blogsBuffer = await BlogsApi.fetchBlogs();
-      setBlogs(blogsBuffer);
-    } catch (error) {
-      setShowNoteLoadingError(true);
-      console.error(error);
-      alert(error);
-    } finally {
-      setNotesLoading(false);
-    }
-  }
+  console.log(blogList);
 
   useEffect(() => {
-    loadNotes();
+    loadBlogs();
   }, []);
 
-  async function deleteBlog(blogId: string) {
-    try {
-      await BlogsApi.deleteBlog(blogId);
-      setBlogs(blogs.filter((blog) => blog._id !== blogId));
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    }
-  }
-  function hideBlog(blogId: string) {
-    setBlogs(blogs.filter((blog) => blog._id !== blogId));
-  }
   async function onSubmitClickHandler(blogBody: BlogInterface) {
     try {
       let responseBlog: BlogModel;
       if (!blogToEdit) {
-        responseBlog = await BlogsApi.addBlog(blogBody);
-        setBlogs([responseBlog, ...blogs]);
+        try {
+          responseBlog = await BlogsApi.addBlog(blogBody);
+          addBlog(responseBlog);
+        } catch (error) {
+          console.error(error);
+        }
         setShowAddEditBlogModal(false);
       } else {
-        responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
-        setBlogs(
-          blogs.map((existingBlog) =>
-            existingBlog._id === responseBlog._id ? responseBlog : existingBlog
-          )
-        );
+        try {
+          responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
+          editBlog(responseBlog, blogToEdit._id);
+          
+        } catch (error) {
+          console.error(error);
+        }
         setBlogToEdit(null);
       }
     } catch (error) {
@@ -71,8 +54,8 @@ const LoggedInContent = () => {
 
   return (
     <Container className={styles.mainContainer}>
-      {notesLoading && <Spinner animation="border" variant="primary" />}
-      {showNoteLoadingError && <p>Something went wrong</p>}
+      {!blogList && <Spinner animation="border" variant="primary" />}
+      {/* {showNoteLoadingError && <p>Something went wrong</p>} */}
       <center>
         <Button
           variant="primary"
@@ -98,15 +81,13 @@ const LoggedInContent = () => {
         />
       )}
 
-      {blogs.map((blog: BlogModel) => (
+      {blogList.map((blog: BlogModel) => (
         <BlogCard
           blog={blog}
           key={blog._id}
-          onDeleteButtonClicked={() => deleteBlog(blog._id ? blog._id : "")}
           onEditButtonClicked={() => {
             setBlogToEdit(blog);
           }}
-          onHideButtonClicked={() => hideBlog(blog._id)}
         />
       ))}
     </Container>

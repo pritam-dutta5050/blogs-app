@@ -19,25 +19,23 @@ import { LoggedinUserContext } from "../../store/loggedInUser-store";
 import { formatDate } from "../../utils/formatDate";
 import styles from "./BlogCard.module.css";
 import CommentsModal from "./CommentsModal";
+import { BlogListContext } from "../../store/blog-list-store";
 
 interface BlogCardProps {
   blog: BlogModel;
-  onDeleteButtonClicked: () => void;
   onEditButtonClicked: () => void;
-  onHideButtonClicked: () => void;
 }
 
 const BlogCard = ({
   blog,
-  onDeleteButtonClicked,
   onEditButtonClicked,
-  onHideButtonClicked,
 }: BlogCardProps) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
 
   const loggedInuserId = useContext(LoggedinUserContext).userData?._id;
+  const {hideBlog, deleteBlog} = useContext(BlogListContext);
 
   async function likeBlog(blogId: string) {
     try {
@@ -68,7 +66,7 @@ const BlogCard = ({
       <Card className={`${styles.blogCard}`}>
         <span
           className={`position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger ${styles.cross}`}
-          onClick={onHideButtonClicked}
+          onClick={() => hideBlog(blog._id)}
         >
           <RxCross1/>
         </span>
@@ -87,7 +85,7 @@ const BlogCard = ({
                 <Dropdown.Item onClick={onEditButtonClicked}>
                   Edit
                 </Dropdown.Item>
-                <Dropdown.Item onClick={onDeleteButtonClicked}>
+                <Dropdown.Item onClick={()=>{deleteBlog(blog._id)}}>
                   Delete
                 </Dropdown.Item>
               </DropdownButton>

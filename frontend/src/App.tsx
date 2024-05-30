@@ -15,6 +15,7 @@ import { UserModel } from "./models/UserModel";
 import * as BlogsApi from "./network/blogs_api";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
+import BlogListContextProvider from "./store/blog-list-store";
 import { LoggedinUserContext } from "./store/loggedInUser-store";
 
 function App() {
@@ -43,62 +44,64 @@ function App() {
     <>
       <BrowserRouter>
         <LoggedinUserContext.Provider value={{ userData: loggedinUser }}>
-          <div className="d-flex">
-            {!isSmallScreen ? (
-              <Sidebar />
-            ) : (
-              <OffCanvas
-                showOffcanvas={showOffcanvas}
-                hideOffcanvas={() => setShowOffcanvas(false)}
-              />
-            )}
-            <div className="w-100">
-              <NavBar
-                showOffcanvasButton={isSmallScreen}
-                showOffcanvasButtonClicked={() => setShowOffcanvas(true)}
-                onSignupClicked={() => setShowSignupModal(true)}
-                onLoginClicked={() => setShowLoginModal(true)}
-                onLogoutSuccessful={() => setLoggedinUser(null)}
-              />
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    loggedinUser ? <LoggedInContent /> : <LoggedOutContent />
-                  }
+          <BlogListContextProvider>
+            <div className="d-flex">
+              {!isSmallScreen ? (
+                <Sidebar />
+              ) : (
+                <OffCanvas
+                  showOffcanvas={showOffcanvas}
+                  hideOffcanvas={() => setShowOffcanvas(false)}
                 />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/*" element={<NotFoundPage />} />
-              </Routes>
+              )}
+              <div className="w-100">
+                <NavBar
+                  showOffcanvasButton={isSmallScreen}
+                  showOffcanvasButtonClicked={() => setShowOffcanvas(true)}
+                  onSignupClicked={() => setShowSignupModal(true)}
+                  onLoginClicked={() => setShowLoginModal(true)}
+                  onLogoutSuccessful={() => setLoggedinUser(null)}
+                />
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      loggedinUser ? <LoggedInContent /> : <LoggedOutContent />
+                    }
+                  />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/*" element={<NotFoundPage />} />
+                </Routes>
 
-              <Footer />
+                <Footer />
+              </div>
             </div>
-          </div>
-          {/* <div className="d-flex">
+            {/* <div className="d-flex">
           <div className="d-flex flex-column contentContainer">
             {loggedinUser ? <LoggedInContent /> : <LoggedOutContent />}
             <Footer />
           </div>
         </div> */}
 
-          {showSignupModal && (
-            <SignupModal
-              onDismiss={() => setShowSignupModal(false)}
-              onSignupSuccessful={(user) => {
-                setLoggedinUser(user);
-                setShowSignupModal(false);
-              }}
-            />
-          )}
-          {showLoginModal && (
-            <LoginModal
-              onDismiss={() => setShowLoginModal(false)}
-              onLoginSuccessful={(user) => {
-                setLoggedinUser(user);
-                setShowLoginModal(false);
-              }}
-            />
-          )}
+            {showSignupModal && (
+              <SignupModal
+                onDismiss={() => setShowSignupModal(false)}
+                onSignupSuccessful={(user) => {
+                  setLoggedinUser(user);
+                  setShowSignupModal(false);
+                }}
+              />
+            )}
+            {showLoginModal && (
+              <LoginModal
+                onDismiss={() => setShowLoginModal(false)}
+                onLoginSuccessful={(user) => {
+                  setLoggedinUser(user);
+                  setShowLoginModal(false);
+                }}
+              />
+            )}
+          </BlogListContextProvider>
         </LoggedinUserContext.Provider>
       </BrowserRouter>
     </>
