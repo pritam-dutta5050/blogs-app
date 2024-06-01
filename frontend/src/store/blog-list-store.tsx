@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useState } from "react";
 import { BlogModel } from "../models/BlogModel";
 import * as BlogsApi from "../network/blogs_api";
 
@@ -12,6 +12,8 @@ type BlogListAction =
 interface BlogListContextProps {
   blogList: BlogModel[];
   loadBlogs: () => void;
+  isFetching: boolean;
+  isFetchingError: boolean;
   addBlog: (blog: BlogModel) => void;
   editBlog: (blog: BlogModel, blogId: string) => void;
   deleteBlog: (blogId: string) => void;
@@ -21,6 +23,8 @@ interface BlogListContextProps {
 export const BlogListContext = createContext<BlogListContextProps>({
   blogList: [],
   loadBlogs: () => {},
+  isFetching: false,
+  isFetchingError: false,
   addBlog: () => {},
   editBlog: () => {},
   deleteBlog: () => {},
@@ -54,9 +58,12 @@ const BlogListContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 
   const [blogList, dispatchBlogList] = useReducer(BlogListReducer, []);
+  const [isFetching, setIsfetching] = useState(false);
+  const [isFetchingError, setIsfetchingError] = useState(false);
 
   const loadBlogs = async () => {
     try {
+      setIsfetching(true);
       const blogsBuffer = await BlogsApi.fetchBlogs();
       dispatchBlogList({
         type: "LOAD_BLOGS",
@@ -66,6 +73,9 @@ const BlogListContextProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     } catch (error) {
       console.error(error);
+      setIsfetchingError(true);
+    }finally{
+      setIsfetching(false);
     }
   };
 
@@ -118,6 +128,8 @@ const BlogListContextProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         blogList: blogList,
         loadBlogs: loadBlogs,
+        isFetching: isFetching,
+        isFetchingError: isFetchingError,
         addBlog: addBlog,
         editBlog: editBlog,
         deleteBlog: deleteBlog,

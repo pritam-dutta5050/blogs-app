@@ -29,6 +29,7 @@ app.use(session({
 app.use("/api/users", userRoutes);
 app.use("/api/blogs", requireAuth, blogRoutes);
 app.use("/api/comments", requireAuth, commentRoutes);
+
 app.use(morgan("dev"));
 app.use((req, res, next)=>{
     next(createHttpError(404, "Endpoint not found"));

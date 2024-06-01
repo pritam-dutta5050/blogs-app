@@ -5,19 +5,17 @@ import { BlogModel } from "../../models/BlogModel";
 import * as BlogsApi from "../../network/blogs_api";
 import { BlogListContext } from "../../store/blog-list-store";
 import AddEditBlogModal from "../modals/AddEditBlogModal";
-import BlogCard from "./BlogCard";
+import AllBlogs from "./AllBlogs";
 import styles from "./LoggedInContent.module.css";
 
 const LoggedInContent = () => {
-  // const [notesLoading, setNotesLoading] = useState(false);
-  // const [showNoteLoadingError, setShowNoteLoadingError] = useState(false);
   const [showAddEditBlogModal, setShowAddEditBlogModal] = useState(false);
   const [blogToEdit, setBlogToEdit] = useState<BlogModel | null>(null);
 
   console.log("LoggedInComponent rendered");
-  // console.log(blogs);
-  
-  const {blogList, loadBlogs, addBlog, editBlog} = useContext(BlogListContext);
+
+  const { blogList, loadBlogs, isFetching, isFetchingError, addBlog, editBlog } =
+    useContext(BlogListContext);
 
   console.log(blogList);
 
@@ -40,7 +38,6 @@ const LoggedInContent = () => {
         try {
           responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
           editBlog(responseBlog, blogToEdit._id);
-          
         } catch (error) {
           console.error(error);
         }
@@ -54,8 +51,6 @@ const LoggedInContent = () => {
 
   return (
     <Container className={styles.mainContainer}>
-      {!blogList && <Spinner animation="border" variant="primary" />}
-      {/* {showNoteLoadingError && <p>Something went wrong</p>} */}
       <center>
         <Button
           variant="primary"
@@ -65,7 +60,9 @@ const LoggedInContent = () => {
           Add Blog
         </Button>
       </center>
-
+      {isFetchingError && <center>Something went wrong, please refresh or try again</center>}
+      {isFetching ? <Spinner animation="border" variant="primary" /> : <AllBlogs setBlogToEdit={(blog) => setBlogToEdit(blog) }/>}
+      
       {blogToEdit && (
         <AddEditBlogModal
           onDismiss={() => setBlogToEdit(null)}
@@ -80,16 +77,6 @@ const LoggedInContent = () => {
           onSubmitButtonPressed={onSubmitClickHandler}
         />
       )}
-
-      {blogList.map((blog: BlogModel) => (
-        <BlogCard
-          blog={blog}
-          key={blog._id}
-          onEditButtonClicked={() => {
-            setBlogToEdit(blog);
-          }}
-        />
-      ))}
     </Container>
   );
 };
