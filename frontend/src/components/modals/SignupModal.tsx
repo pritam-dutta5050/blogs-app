@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { useContext } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { SignupInterface } from "../../interfaces/SignupInterface";
+import { UserContext } from "../../store/loggedInUser-store";
 import TextInputField from "../form/TextInputField";
-import { ConflictError } from "../../errors/httperrors";
-import * as BlogsApi from "../../network/blogs_api";
-import { UserModel } from "../../models/UserModel";
 
 interface SignupModalInterface {
   onDismiss: () => void;
-  onSignupSuccessful: (user: UserModel) => void;
+  onSignupSuccessful: (isSuccessful: boolean) => void;
 }
 
 const SignupModal = ({ onDismiss, onSignupSuccessful }: SignupModalInterface) => {
-  const [errorText, setErrorText] = useState<string|null>(null);
+  // const [errorText, setErrorText] = useState<string|null>(null);
+  const {signUpUser} = useContext(UserContext);
   const {
     register,
     handleSubmit,
@@ -28,18 +27,8 @@ const SignupModal = ({ onDismiss, onSignupSuccessful }: SignupModalInterface) =>
   });
 
   async function onSubmit(credentials: SignupInterface) {
-    try {
-      const responseUser = await BlogsApi.signupUser(credentials);
-      onSignupSuccessful(responseUser);
-      
-    } catch (error) {
-      if(error instanceof ConflictError){
-        setErrorText(error.message);
-      }
-      else{
-        alert(error);
-      }
-    }
+    signUpUser(credentials);
+    onSignupSuccessful(true);
   }
   console.log("SignupModal component rendered");
   return (
@@ -49,11 +38,11 @@ const SignupModal = ({ onDismiss, onSignupSuccessful }: SignupModalInterface) =>
           <Modal.Title>Sign Up</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {errorText && 
+        {/* {errorText && 
         <Alert variant='danger'>
           {errorText}
         </Alert>
-        }
+        } */}
           <Form onSubmit={handleSubmit(onSubmit)}>
             <TextInputField
               label="Username"

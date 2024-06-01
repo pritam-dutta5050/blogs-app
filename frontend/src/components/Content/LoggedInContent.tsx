@@ -7,6 +7,7 @@ import { BlogListContext } from "../../store/blog-list-store";
 import AddEditBlogModal from "../modals/AddEditBlogModal";
 import AllBlogs from "./AllBlogs";
 import styles from "./LoggedInContent.module.css";
+import { UserContext } from "../../store/loggedInUser-store";
 
 const LoggedInContent = () => {
   const [showAddEditBlogModal, setShowAddEditBlogModal] = useState(false);
@@ -18,6 +19,7 @@ const LoggedInContent = () => {
     useContext(BlogListContext);
 
   console.log(blogList);
+  console.log(useContext(UserContext).user);
 
   useEffect(() => {
     loadBlogs();

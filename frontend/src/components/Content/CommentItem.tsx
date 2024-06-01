@@ -5,7 +5,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { UserModel } from "../../models/UserModel";
 import { CommentModel } from "../../models/commentModel";
 import * as BlogsApi from "../../network/blogs_api";
-import { LoggedinUserContext } from "../../store/loggedInUser-store";
+import { UserContext } from "../../store/loggedInUser-store";
 
 interface CommentItemProps {
   comment: CommentModel;
@@ -20,7 +20,7 @@ const CommentItem = ({
   editComment,
 }: CommentItemProps) => {
   const [commentUser, setCommentUser] = useState<UserModel | null>(null);
-  const loggedInUserId = useContext(LoggedinUserContext).userData?._id;
+  const loggedInUserId = useContext(UserContext).user?._id;
 
   useEffect(() => {
     async function getUserById(userId: string) {

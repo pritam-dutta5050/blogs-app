@@ -1,21 +1,18 @@
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { useContext } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { LoginInterface } from "../../interfaces/LoginInterface";
+import { UserContext } from "../../store/loggedInUser-store";
 import TextInputField from "../form/TextInputField";
-import { UserModel } from "../../models/UserModel";
-import { UnauthorizedError } from "../../errors/httperrors";
-import { useState } from "react";
-import * as BlogsApi from "../../network/blogs_api";
-import styles from "./LoginModal.module.css";
 
 interface LoginModalInterface {
   onDismiss: () => void;
-  onLoginSuccessful: (user: UserModel) => void;
+  onLoginSuccessful: (isSuccessful: boolean) => void;
 }
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalInterface) => {
-  const [errorText, setErrorText] = useState<string | null>(null);
-
+  // const [errorText, setErrorText] = useState<string | null>(null);
+  const {loginUser} = useContext(UserContext);
   const {
     register,
     handleSubmit,
@@ -28,17 +25,8 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalInterface) => {
   });
 
   async function onSubmit(credentials: LoginInterface) {
-    try {
-      const responseUser = await BlogsApi.loginUser(credentials);
-      onLoginSuccessful(responseUser);
-    } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        setErrorText(error.message);
-      } else {
-        alert(error);
-      }
-      console.error(error);
-    }
+    loginUser(credentials);
+    onLoginSuccessful(true);
   }
 
   console.log("LoginModal component rendered");
@@ -49,7 +37,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalInterface) => {
           <Modal.Title>Login</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {errorText && <Alert variant="danger">{errorText}</Alert>}
+          {/* {errorText && <Alert variant="danger">{errorText}</Alert>} */}
           <Form onSubmit={handleSubmit(onSubmit)}>
             <TextInputField
               label="Username"

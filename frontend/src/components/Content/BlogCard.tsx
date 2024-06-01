@@ -15,7 +15,7 @@ import { RxCross1 } from "react-icons/rx";
 import { BlogModel } from "../../models/BlogModel";
 import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
-import { LoggedinUserContext } from "../../store/loggedInUser-store";
+import { UserContext } from "../../store/loggedInUser-store";
 import { formatDate } from "../../utils/formatDate";
 import styles from "./BlogCard.module.css";
 import CommentsModal from "./CommentsModal";
@@ -34,7 +34,7 @@ const BlogCard = ({
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
 
-  const loggedInuserId = useContext(LoggedinUserContext).userData?._id;
+  const loggedInuserId = useContext(UserContext).user?._id;
   const {hideBlog, deleteBlog} = useContext(BlogListContext);
 
   async function likeBlog(blogId: string) {

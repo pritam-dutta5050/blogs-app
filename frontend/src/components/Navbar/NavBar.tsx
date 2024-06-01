@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { MdMenu } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { LoggedinUserContext } from "../../store/loggedInUser-store";
+import { UserContext } from "../../store/loggedInUser-store";
 import styles from "./NavBar.module.css";
 import NavBarLoggedinView from "./NavBarLoggedinView";
 import NavBarLoggedOutView from "./NavBarLoogedOutView";
@@ -12,7 +12,7 @@ interface NavBarProps {
   showOffcanvasButtonClicked: () => void;
   onSignupClicked: () => void;
   onLoginClicked: () => void;
-  onLogoutSuccessful: () => void;
+  // onLogoutSuccessful: () => void;
 }
 
 const NavBar = ({
@@ -20,10 +20,10 @@ const NavBar = ({
   showOffcanvasButtonClicked,
   onSignupClicked,
   onLoginClicked,
-  onLogoutSuccessful,
+  // onLogoutSuccessful,
 }: NavBarProps) => {
 
-  const loggedinUserFromContext = useContext(LoggedinUserContext).userData;
+  const {user} = useContext(UserContext);
 
   return (
     <Navbar
@@ -50,9 +50,9 @@ const NavBar = ({
             <Nav.Link as={Link} to="/profile">Link</Nav.Link>
           </Nav>
           <Nav className="ms-auto">
-            {loggedinUserFromContext ? (
+            {user ? (
               <NavBarLoggedinView
-                onLogoutSuccessful={onLogoutSuccessful}
+                // onLogoutSuccessful={onLogoutSuccessful}
               />
             ) : (
               <NavBarLoggedOutView
