@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaClock } from "react-icons/fa";
 import styles from "./Sidebar.module.css";
 
 const CurrentTime = () => {
   console.log("Current time component rendered");
   const [currTime, setCurrTime] = useState(new Date().toLocaleTimeString());
-  setTimeout(() => {
-    setCurrTime(new Date().toLocaleTimeString());
-  }, 1000);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setCurrTime(new Date().toLocaleTimeString());
+      console.log(currTime);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  },[currTime])
+  
   return (
     <div className={`${styles.timeContainer}`}>
       <FaClock className={`${styles.timeIcon}`} />
