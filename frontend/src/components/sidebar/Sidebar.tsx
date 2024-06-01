@@ -6,9 +6,11 @@ import { FaUserFriends } from "react-icons/fa";
 import { IoHome, IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
+import CurrentTime from "./CurrentTime";
 
 const Sidebar = () => {
   const [selectedTab, setSelectedTab] = useState("Home");
+  console.log("Sidebar ")
 
   return (
     <div
@@ -23,6 +25,9 @@ const Sidebar = () => {
       </NavLink>
       <hr />
       <ul className="nav nav-pills flex-column mb-auto">
+        <li className="nav-item">
+          <CurrentTime/>
+        </li>
         <li className="nav-item">
           <NavLink
             as={Link}
