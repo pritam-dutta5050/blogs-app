@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import userModel from "../models/userModel";
 import bcrypt from "bcrypt";
 import * as dummyData from "../data/dummyData";
+import { assertIsDefined } from "../util/assertIsDefined";
 
 export const addUserOneTimeOnly: RequestHandler = async (req, res, next) => {
   try {
@@ -26,8 +27,7 @@ export const addUserOneTimeOnly: RequestHandler = async (req, res, next) => {
   }
 };
 
-
-export const getAuthenticatedUser : RequestHandler = async(req, res, next)=>{
+export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   const userId = req.session.userId;
   try {
     const user = await userModel.findById(userId).exec();
@@ -36,20 +36,17 @@ export const getAuthenticatedUser : RequestHandler = async(req, res, next)=>{
     console.error(error);
     next(error);
   }
-}
+};
 
-
-export const getUserById: RequestHandler = async (req, res, next) =>{
+export const getUserById: RequestHandler = async (req, res, next) => {
   const userId = req.params.userId;
   try {
     const user = await userModel.findById(userId).exec();
     res.status(200).json(user);
-    
   } catch (error) {
     next(error);
   }
-}
-
+};
 
 interface signupBody {
   username?: string;
@@ -117,23 +114,25 @@ export const login: RequestHandler<
     const existingUser = await userModel
       .findOne({
         username: username,
-      }).select("+password")
+      })
+      .select("+password")
       .exec();
-  
-      if(!existingUser){
-        throw createHttpError(401, "Invalid credential");
-      }
-      const passwordMatch = await bcrypt.compare(password, existingUser.password);
-      if(!passwordMatch){
-        throw createHttpError(401, "Invalid credential");
-      }
-      req.session.userId = existingUser._id;
-      res.status(201).json(existingUser);
+
+    console.log(existingUser);
+
+    if (!existingUser) {
+      throw createHttpError(401, "Invalid credential");
+    }
+    const passwordMatch = await bcrypt.compare(password, existingUser.password);
+    if (!passwordMatch) {
+      throw createHttpError(401, "Invalid credential");
+    }
+    req.session.userId = existingUser._id;
+    res.status(201).json(existingUser);
   } catch (error) {
     console.error(error);
     next(error);
   }
-  
 };
 
 export const logout: RequestHandler = (req, res, next) => {
@@ -144,4 +143,84 @@ export const logout: RequestHandler = (req, res, next) => {
       res.sendStatus(200);
     }
   });
+};
+
+export const getUserCompleteById: RequestHandler = async (req, res, next) => {
+  const userId = req.params.userId;
+  try {
+    const user = await userModel
+      .findById(userId)
+      .select(
+        "+email +phone +country +friends +gender +proffesion +bio +friend_requests"
+      )
+      .exec();
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+interface UpdateUserBody {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  gender?: string;
+  bio?: string;
+  country?: string;
+  proffesion?: string;
+}
+interface UpdateUserParam {
+  userId?: string;
+}
+export const updateUser: RequestHandler<
+  UpdateUserParam,
+  unknown,
+  UpdateUserBody,
+  unknown
+> = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const email = req.body.email;
+  const phone = req.body.phone;
+  const gender = req.body.gender;
+  const bio = req.body.bio;
+  const country = req.body.country;
+  const proffesion = req.body.proffesion;
+
+  const authenticatedUser = req.session.userId;
+  try {
+    assertIsDefined(authenticatedUser);
+    if (authenticatedUser.toString() !== userId) {
+      throw createHttpError(
+        401,
+        "Current user not authenticated to update data of other user"
+      );
+    }
+    const user = await userModel
+      .findById(userId)
+      .select(
+        "+email +phone +country +friends +gender +proffesion +bio +friend_requests"
+      ).exec();
+      if (!user) {
+        throw createHttpError(404, "User not found");
+      }
+      console.log(user);
+      user.firstName = firstName ? firstName : user.firstName;
+      user.lastName = lastName ? lastName : user.lastName;
+      user.email = email ? email : user.email;
+      user.phone = phone ? phone : user.phone;
+      user.gender = gender? gender : user.gender;
+      user.bio = bio? bio : user.bio;
+      user.country = country? country : user.country;
+      user.proffesion = proffesion? proffesion : user.proffesion;
+
+      const updatedUser = await user.save();
+      res.status(200).json(updatedUser);
+      
+  } catch (error) {
+    next(error);
+  }
 };

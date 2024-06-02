@@ -7,7 +7,9 @@ const router = Express.Router();
 router.post("/adduseronetimeonly", UserController.addUserOneTimeOnly);
 
 router.get("/", requireAuth, UserController.getAuthenticatedUser);
-router.get("/:userId", requireAuth, UserController.getUserById)
+router.get("/:userId", requireAuth, UserController.getUserById);
+router.get("/complete/:userId", requireAuth, UserController.getUserCompleteById);
+router.patch("/:userId", requireAuth, UserController.updateUser);
 router.post("/signup", UserController.signup);
 router.post("/login", UserController.login);
 router.post("/logout", UserController.logout);
