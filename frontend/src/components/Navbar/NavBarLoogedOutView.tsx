@@ -1,3 +1,4 @@
+import styles from "./NavBar.module.css"
 
 interface NavBarLoggedOutViewProps {
   onSignupClicked: () => void;
@@ -12,14 +13,14 @@ const NavBarLoogedOutView = ({
     <>
       <button
         type="button"
-        className="btn btn-outline-light me-2"
+        className={`${styles.btn} btn btn-outline-light me-2`}
         onClick={onLoginClicked}
       >
         Login
       </button>
       <button
         type="button"
-        className="btn btn-warning"
+        className={`${styles.btn} btn btn-warning`}
         onClick={onSignupClicked}
       >
         Sign-up

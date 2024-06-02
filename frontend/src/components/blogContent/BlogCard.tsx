@@ -6,9 +6,7 @@ import {
   Card,
   Col,
   Container,
-  Dropdown,
-  DropdownButton,
-  Row,
+  Row
 } from "react-bootstrap";
 import { MdMessage, MdThumbUp } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
@@ -16,11 +14,12 @@ import { BlogModel } from "../../models/BlogModel";
 import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
 import * as UsersApi from "../../network/users_api";
+import { BlogListContext } from "../../store/blog-list-store";
 import { UserContext } from "../../store/loggedInUser-store";
 import { formatDate } from "../../utils/formatDate";
-import styles from "./BlogCard.module.css";
 import CommentsModal from "../modals/CommentsModal";
-import { BlogListContext } from "../../store/blog-list-store";
+import styles from "./BlogCard.module.css";
+import OptionsButton from "./OptionsButton";
 
 interface BlogCardProps {
   blog: BlogModel;
@@ -70,29 +69,24 @@ const BlogCard = ({ blog, onEditButtonClicked }: BlogCardProps) => {
               {formatDate(blog.createdAt)}
             </span>
           </div>
-            <div className={`${styles.headerButtons}`}>
-          {blog.userId === loggedInuserId && (
-              <DropdownButton id="dropdown-basic-button" title="Options">
-                <Dropdown.Item onClick={onEditButtonClicked}>
-                  Edit
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    deleteBlog(blog._id);
-                  }}
-                >
-                  Delete
-                </Dropdown.Item>
-              </DropdownButton>)}
-              <Button
-                variant="outline-danger"
-                className={`${styles.headerButton}`}
-                onClick={() => hideBlog(blog._id)}
-              >
-                <RxCross1 />
-              </Button>
-            </div>
-          
+          <div className={`${styles.headerButtons}`}>
+            {blog.userId === loggedInuserId && (
+              <OptionsButton
+                btnArr={[true, true]}
+                onEditButtonClicked={onEditButtonClicked}
+                onDeleteButtonClicked={() => {
+                  deleteBlog(blog._id);
+                }}
+              />
+            )}
+            <Button
+              variant="outline-danger"
+              className={`${styles.headerButton}`}
+              onClick={() => hideBlog(blog._id)}
+            >
+              <RxCross1 />
+            </Button>
+          </div>
         </Card.Header>
         <Card.Body>
           <Card.Title as={"h6"}>{currentBlog.blogTitle}</Card.Title>

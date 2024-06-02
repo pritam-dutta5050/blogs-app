@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from '../store/loggedInUser-store'
 
 const ProfilePage = () => {
+
+  const {user} = useContext(UserContext);
   return (
-    <center><b>Profile section will be a major update of the app. Please stay tuned...</b></center>
+    <center>
+      {user?._id}
+    </center>
   )
 }
 

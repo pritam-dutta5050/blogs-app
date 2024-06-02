@@ -1,4 +1,4 @@
-@media (min-width: 1280px) {
+/* @media (min-width: 1280px) {
     .navbar{
         background-color: rgb(231, 164, 77);
     }
@@ -12,7 +12,10 @@
     .navbar{
         background-color: rgb(77, 231, 226);
     }
-}
-.navbar{
+} */
+.navbar1{
     height: 68px;
+}
+.btn{
+    margin: 5px 8px 0 0;
 }

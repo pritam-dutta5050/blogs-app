@@ -4,10 +4,9 @@ import { useForm } from "react-hook-form";
 import { CommentInterface } from "../../interfaces/CommentInterface";
 import { BlogModel } from "../../models/BlogModel";
 import { CommentModel } from "../../models/commentModel";
-import * as BlogsApi from "../../network/blogs_api";
 import * as CommentsApi from "../../network/comments_api";
-import TextInputField from "../form/TextInputField";
 import CommentItem from "../blogContent/CommentItem";
+import TextInputField from "../form/TextInputField";
 
 interface CommentsModalProps {
   blog: BlogModel;

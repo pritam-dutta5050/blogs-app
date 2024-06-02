@@ -31,9 +31,10 @@ const NavBar = ({
       variant="dark"
       expand="sm"
       sticky="top"
-      className={styles.navbar}
+      // className={styles.navbar1}
+      // style={{height: '68px'}}
     >
-      <Container>
+      <Container >
       {showOffcanvasButton && (
               <li
                 className="nav-link px-2 text-white"
@@ -52,16 +53,16 @@ const NavBar = ({
           <Nav className="ms-auto">
             {user ? (
               <NavBarLoggedinView
-                // onLogoutSuccessful={onLogoutSuccessful}
+              // onLogoutSuccessful={onLogoutSuccessful}
               />
             ) : (
               <NavBarLoggedOutView
-                onSignupClicked={onSignupClicked}
-                onLoginClicked={onLoginClicked}
+              onSignupClicked={onSignupClicked}
+              onLoginClicked={onLoginClicked}
               />
             )}
           </Nav>
-        </Navbar.Collapse>
+            </Navbar.Collapse>
       </Container>
     </Navbar>
   );
