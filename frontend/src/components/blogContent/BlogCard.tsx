@@ -62,13 +62,6 @@ const BlogCard = ({ blog, onEditButtonClicked }: BlogCardProps) => {
   return (
     <div>
       <Card className={`${styles.blogCard}`}>
-        <span
-          className={`position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger ${styles.cross}`}
-          onClick={() => hideBlog(blog._id)}
-        >
-          <RxCross1 />
-        </span>
-
         <Card.Header as={"h5"} className={styles.cardHeader}>
           <div className={`${styles.blogUser}`}>
             {blogUser?.firstName} {blogUser?.lastName}
@@ -77,8 +70,8 @@ const BlogCard = ({ blog, onEditButtonClicked }: BlogCardProps) => {
               {formatDate(blog.createdAt)}
             </span>
           </div>
-          {blog.userId === loggedInuserId && (
             <div className={`${styles.headerButtons}`}>
+          {blog.userId === loggedInuserId && (
               <DropdownButton id="dropdown-basic-button" title="Options">
                 <Dropdown.Item onClick={onEditButtonClicked}>
                   Edit
@@ -90,9 +83,16 @@ const BlogCard = ({ blog, onEditButtonClicked }: BlogCardProps) => {
                 >
                   Delete
                 </Dropdown.Item>
-              </DropdownButton>
+              </DropdownButton>)}
+              <Button
+                variant="outline-danger"
+                className={`${styles.headerButton}`}
+                onClick={() => hideBlog(blog._id)}
+              >
+                <RxCross1 />
+              </Button>
             </div>
-          )}
+          
         </Card.Header>
         <Card.Body>
           <Card.Title as={"h6"}>{currentBlog.blogTitle}</Card.Title>
