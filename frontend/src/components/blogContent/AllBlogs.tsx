@@ -6,8 +6,8 @@ interface AllBlogsProps{
     setBlogToEdit: (blog:BlogModel) => void;
 }
 const AllBlogs = ({setBlogToEdit}:AllBlogsProps) => {
-    const { blogList } =
-    useContext(BlogListContext);
+    const { blogList } = useContext(BlogListContext);
+    // console.log("All blogs rendered");
   return (
     <div>
     {blogList.map((blog: BlogModel) => (

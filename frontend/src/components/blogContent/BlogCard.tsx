@@ -15,10 +15,11 @@ import { RxCross1 } from "react-icons/rx";
 import { BlogModel } from "../../models/BlogModel";
 import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
+import * as UsersApi from "../../network/users_api";
 import { UserContext } from "../../store/loggedInUser-store";
 import { formatDate } from "../../utils/formatDate";
 import styles from "./BlogCard.module.css";
-import CommentsModal from "./CommentsModal";
+import CommentsModal from "../modals/CommentsModal";
 import { BlogListContext } from "../../store/blog-list-store";
 
 interface BlogCardProps {
@@ -26,16 +27,13 @@ interface BlogCardProps {
   onEditButtonClicked: () => void;
 }
 
-const BlogCard = ({
-  blog,
-  onEditButtonClicked,
-}: BlogCardProps) => {
+const BlogCard = ({ blog, onEditButtonClicked }: BlogCardProps) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
 
   const loggedInuserId = useContext(UserContext).user?._id;
-  const {hideBlog, deleteBlog} = useContext(BlogListContext);
+  const { hideBlog, deleteBlog } = useContext(BlogListContext);
 
   async function likeBlog(blogId: string) {
     try {
@@ -51,7 +49,7 @@ const BlogCard = ({
   }
 
   async function getUserById(userId: string) {
-    const user: UserModel = await BlogsApi.getUserById(userId);
+    const user: UserModel = await UsersApi.getUserById(userId);
     setBlogUser(user);
   }
   useEffect(() => {
@@ -68,7 +66,7 @@ const BlogCard = ({
           className={`position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger ${styles.cross}`}
           onClick={() => hideBlog(blog._id)}
         >
-          <RxCross1/>
+          <RxCross1 />
         </span>
 
         <Card.Header as={"h5"} className={styles.cardHeader}>
@@ -85,7 +83,11 @@ const BlogCard = ({
                 <Dropdown.Item onClick={onEditButtonClicked}>
                   Edit
                 </Dropdown.Item>
-                <Dropdown.Item onClick={()=>{deleteBlog(blog._id)}}>
+                <Dropdown.Item
+                  onClick={() => {
+                    deleteBlog(blog._id);
+                  }}
+                >
                   Delete
                 </Dropdown.Item>
               </DropdownButton>

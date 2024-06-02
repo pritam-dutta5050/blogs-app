@@ -5,8 +5,9 @@ import { CommentInterface } from "../../interfaces/CommentInterface";
 import { BlogModel } from "../../models/BlogModel";
 import { CommentModel } from "../../models/commentModel";
 import * as BlogsApi from "../../network/blogs_api";
+import * as CommentsApi from "../../network/comments_api";
 import TextInputField from "../form/TextInputField";
-import CommentItem from "./CommentItem";
+import CommentItem from "../blogContent/CommentItem";
 
 interface CommentsModalProps {
   blog: BlogModel;
@@ -45,7 +46,7 @@ const CommentsModal = ({
 
   async function addComment(commentBody: CommentInterface, blogId: string) {
     try {
-      const updatedBlog = await BlogsApi.addComment(commentBody, blogId);
+      const updatedBlog = await CommentsApi.addComment(commentBody, blogId);
       setCurrentComments(updatedBlog.comments);
       onCommentsModified(updatedBlog);
       setValue("commentText", "");
@@ -55,7 +56,7 @@ const CommentsModal = ({
   }
   async function deleteComment(commentId: string, blogId: string) {
     try {
-      const blog = await BlogsApi.deleteComment(commentId, blogId);
+      const blog = await CommentsApi.deleteComment(commentId, blogId);
       setCurrentComments(blog.comments);
       onCommentsModified(blog);
     } catch (error) {
@@ -65,7 +66,7 @@ const CommentsModal = ({
 
   async function editComment(comment: CommentInterface, blogId: string) {
     try {
-      const blog = await BlogsApi.editComment(comment, blogId);
+      const blog = await CommentsApi.editComment(comment, blogId);
       setCurrentComments(blog.comments);
       onCommentsModified(blog);
       setIsAdding(true);

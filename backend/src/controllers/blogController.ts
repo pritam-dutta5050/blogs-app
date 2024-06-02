@@ -1,9 +1,8 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
+import mongoose, { Types } from "mongoose";
 import blogModel from "../models/blogModel";
 import { assertIsDefined } from "../util/assertIsDefined";
-import mongoose, { Types } from "mongoose";
-import commentModel, { commentInterface } from "../models/commentModel";
 
 interface blogBody {
   blogTitle?: string;
@@ -14,9 +13,7 @@ interface blogParams {
 }
 
 export const getBlogs: RequestHandler = async (req, res, next) => {
-  // const authenticatedUser = req.session.userId;
   try {
-    // assertIsDefined(authenticatedUser);
     const notes = await blogModel.find().exec();
     res.status(200).json(notes);
   } catch (error) {

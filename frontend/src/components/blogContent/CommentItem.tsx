@@ -4,7 +4,7 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { UserModel } from "../../models/UserModel";
 import { CommentModel } from "../../models/commentModel";
-import * as BlogsApi from "../../network/blogs_api";
+import * as UsersApi from "../../network/users_api";
 import { UserContext } from "../../store/loggedInUser-store";
 
 interface CommentItemProps {
@@ -24,7 +24,7 @@ const CommentItem = ({
 
   useEffect(() => {
     async function getUserById(userId: string) {
-      const user: UserModel = await BlogsApi.getUserById(userId);
+      const user: UserModel = await UsersApi.getUserById(userId);
       setCommentUser(user);
     }
     getUserById(comment.commentBy);

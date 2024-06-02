@@ -1,19 +1,20 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import MainContent from "./components/Content/MainContent";
+
 import NavBar from "./components/Navbar/NavBar";
 import Footer from "./components/footer/Footer";
 import LoginModal from "./components/modals/LoginModal";
 import SignupModal from "./components/modals/SignupModal";
 import OffCanvas from "./components/offcanvas/OffCanvas";
 import Sidebar from "./components/sidebar/Sidebar";
+import MainContentPage from "./pages/MainContentPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
 import BlogListContextProvider from "./store/blog-list-store";
-import UserContextProvider, { UserContext } from "./store/loggedInUser-store";
+import UserContextProvider from "./store/loggedInUser-store";
 
 function App() {
   const [showSignupModal, setShowSignupModal] = useState(false);
@@ -22,13 +23,7 @@ function App() {
 
   const isSmallScreen = useMediaQuery({ query: "(max-width:600px)" });
 
-  const { getUser } = useContext(UserContext);
-
   console.log("App component rendered");
-
-  useEffect(() => {
-    getUser();
-  }, []);
 
   return (
     <>
@@ -52,7 +47,7 @@ function App() {
                   onLoginClicked={() => setShowLoginModal(true)}
                 />
                 <Routes>
-                  <Route path="/" element={<MainContent />} />
+                  <Route path="/" element={<MainContentPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/*" element={<NotFoundPage />} />
                 </Routes>

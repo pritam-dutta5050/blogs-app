@@ -1,18 +1,18 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 import { UserModel } from "../models/UserModel";
-import * as BlogsApi from "../network/blogs_api";
+import * as UsersApi from "../network/users_api";
 import { SignupInterface } from "../interfaces/SignupInterface";
 import { LoginInterface } from "../interfaces/LoginInterface";
 
 type UserContextAction =
-  | { type: "GET_USER"; payload: { user: UserModel | null } }
+  | { type: "GET_USER"; payload: { userPayload: UserModel } }
   | { type: "SIGNUP_USER"; payload: { user: UserModel } }
   | { type: "LOGIN_USER"; payload: { user: UserModel } }
   | { type: "LOGOUT_USER"; payload: { user: UserModel | null } };
 
 interface UserContextProps {
   user: UserModel | null;
-  getUser: () => void;
+  // getUser: () => void;
   signUpUser: (credentials: SignupInterface) => void;
   loginUser: (credentials: LoginInterface) => void;
   logoutUser: () => void;
@@ -20,7 +20,6 @@ interface UserContextProps {
 
 export const UserContext = createContext<UserContextProps>({
   user: null,
-  getUser: () => {},
   signUpUser: () => {},
   loginUser: () => {},
   logoutUser: () => {},
@@ -32,7 +31,7 @@ const UserContextReducer = (
 ) => {
   let newUser = currUser;
   if (action.type === "GET_USER") {
-    newUser = action.payload.user;
+    newUser = action.payload.userPayload;
   } else if (action.type === "SIGNUP_USER") {
     newUser = action.payload.user;
   } else if (action.type === "LOGIN_USER") {
@@ -40,7 +39,6 @@ const UserContextReducer = (
   } else if (action.type === "LOGOUT_USER") {
     newUser = action.payload.user;
   }
-//   console.log(newUser);
   return newUser;
 };
 
@@ -51,23 +49,21 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getUser = async () => {
     try {
-      const user = await BlogsApi.getloggedinUser();
-
+      const userRes = await UsersApi.getloggedinUser();
       dispatchUser({
         type: "GET_USER",
         payload: {
-          user: user,
+          userPayload: userRes,
         },
       });
     } catch (error) {
-      // console.log("Error in fetching loggedin user");
       console.error(error);
       return null;
     }
   };
   const signUpUser = async (credentials: SignupInterface) => {
     try {
-      const user = await BlogsApi.signupUser(credentials);
+      const user = await UsersApi.signupUser(credentials);
       dispatchUser({
         type: "SIGNUP_USER",
         payload: {
@@ -75,13 +71,12 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
     } catch (error) {
-      // console.log("Error in fetching loggedin user");
       console.error(error);
     }
   };
   const loginUser = async (credentials: LoginInterface) => {
     try {
-      const user = await BlogsApi.loginUser(credentials);
+      const user = await UsersApi.loginUser(credentials);
       dispatchUser({
         type: "LOGIN_USER",
         payload: {
@@ -89,13 +84,12 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
     } catch (error) {
-      // console.log("Error in fetching loggedin user");
       console.error(error);
     }
   };
   const logoutUser = async () => {
     try {
-      await BlogsApi.logoutUser();
+      await UsersApi.logoutUser();
       dispatchUser({
         type: "LOGOUT_USER",
         payload: {
@@ -103,16 +97,17 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
     } catch (error) {
-      // console.log("Error in fetching loggedin user");
       console.error(error);
     }
   };
 
+  useEffect(()=>{
+    getUser();
+  },[]);
   return (
     <UserContext.Provider
       value={{
         user: user,
-        getUser: getUser,
         signUpUser: signUpUser,
         loginUser: loginUser,
         logoutUser: logoutUser,
