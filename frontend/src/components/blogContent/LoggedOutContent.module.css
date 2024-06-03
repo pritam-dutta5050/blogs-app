@@ -1,0 +1,9 @@
+.msgCard{
+    background-color: rgb(247, 174, 174);
+    margin: 15px 15px;
+    padding: 20px;
+    text-align: center;
+    font-size: large;
+    color: red;
+    font-weight: 600;
+  }

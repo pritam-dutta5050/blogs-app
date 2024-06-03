@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
 import { BlogInterface } from "../../interfaces/BlogInterface";
 import { BlogModel } from "../../models/BlogModel";
-import * as BlogsApi from "../../network/blogs_api";
 import { BlogListContext } from "../../store/blog-list-store";
 import AddEditBlogModal from "../modals/AddEditBlogModal";
 import AllBlogs from "./AllBlogs";
@@ -22,30 +21,14 @@ const LoggedInContent = () => {
   useEffect(() => {
     loadBlogs();
   }, []);
-
-  async function onSubmitClickHandler(blogBody: BlogInterface) {
-    try {
-      let responseBlog: BlogModel;
-      if (!blogToEdit) {
-        try {
-          responseBlog = await BlogsApi.addBlog(blogBody);
-          addBlog(responseBlog);
-        } catch (error) {
-          console.error(error);
-        }
-        setShowAddEditBlogModal(false);
-      } else {
-        try {
-          responseBlog = await BlogsApi.updateBlog(blogBody, blogToEdit._id);
-          editBlog(responseBlog, blogToEdit._id);
-        } catch (error) {
-          console.error(error);
-        }
-        setBlogToEdit(null);
-      }
-    } catch (error) {
-      alert(error);
-      console.error(error);
+  
+  function onSubmitClickHandler(blogBody: BlogInterface) {
+    if (!blogToEdit) {
+      addBlog(blogBody);
+      setShowAddEditBlogModal(false);
+    } else {
+      editBlog(blogBody, blogToEdit._id);
+      setBlogToEdit(null);
     }
   }
 

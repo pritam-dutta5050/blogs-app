@@ -1,6 +1,7 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 import { FieldError, RegisterOptions, UseFormRegister } from "react-hook-form";
+import styles from "./TextInputField.module.css"
 
 interface TextInputFieldProps {
   label?: string,
@@ -28,7 +29,7 @@ const TextInputField = ({
   return (
     <Form.Group controlId={name + "-input"}>
       {label &&
-      <Form.Label>{label}</Form.Label>}
+      <Form.Label className={`${styles.label}`}>{label}</Form.Label>}
       <Form.Control
         type={type}
         placeholder={placeholder}

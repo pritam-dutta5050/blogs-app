@@ -115,7 +115,7 @@ export const login: RequestHandler<
       .findOne({
         username: username,
       })
-      .select("+password")
+      .select("+password +email +phone +country +friends +gender +proffesion +bio +friend_requests")
       .exec();
 
     console.log(existingUser);
@@ -146,14 +146,9 @@ export const logout: RequestHandler = (req, res, next) => {
 };
 
 export const getUserCompleteById: RequestHandler = async (req, res, next) => {
-  const userId = req.params.userId;
+  const userId = req.session.userId;
   try {
-    const user = await userModel
-      .findById(userId)
-      .select(
-        "+email +phone +country +friends +gender +proffesion +bio +friend_requests"
-      )
-      .exec();
+    const user = await userModel.findById(userId).select("+email +phone +country +friends +gender +proffesion +bio +friend_requests").exec();
     res.status(200).json(user);
   } catch (error) {
     next(error);
@@ -161,14 +156,14 @@ export const getUserCompleteById: RequestHandler = async (req, res, next) => {
 };
 
 interface UpdateUserBody {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  phone?: string;
-  gender?: string;
-  bio?: string;
-  country?: string;
-  proffesion?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  gender: string;
+  bio: string;
+  country: string;
+  proffesion: string;
 }
 interface UpdateUserParam {
   userId?: string;
@@ -191,6 +186,7 @@ export const updateUser: RequestHandler<
   const proffesion = req.body.proffesion;
 
   const authenticatedUser = req.session.userId;
+
   try {
     assertIsDefined(authenticatedUser);
     if (authenticatedUser.toString() !== userId) {
@@ -207,15 +203,14 @@ export const updateUser: RequestHandler<
       if (!user) {
         throw createHttpError(404, "User not found");
       }
-      console.log(user);
-      user.firstName = firstName ? firstName : user.firstName;
-      user.lastName = lastName ? lastName : user.lastName;
-      user.email = email ? email : user.email;
-      user.phone = phone ? phone : user.phone;
-      user.gender = gender? gender : user.gender;
-      user.bio = bio? bio : user.bio;
-      user.country = country? country : user.country;
-      user.proffesion = proffesion? proffesion : user.proffesion;
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.email = email ;
+      user.phone = phone;
+      user.gender = gender;
+      user.bio = bio;
+      user.country = country;
+      user.proffesion = proffesion;
 
       const updatedUser = await user.save();
       res.status(200).json(updatedUser);

@@ -1,0 +1,60 @@
+.container {
+  padding: 10px;
+  height: fit-content;
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.286);
+
+  .heading {
+    padding: 5px;
+    font-size: x-large;
+    color: rgb(11, 51, 86);
+    /* border: 1px solid red; */
+    border-radius: 10px;
+    background: linear-gradient(
+      to right,
+      rgb(202, 35, 171),
+      rgb(229, 233, 143),
+      rgb(33, 112, 138)
+    );
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 5px 5px 5px;
+
+    .headingButton {
+      float: right;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .msgCard {
+    background-color: rgb(247, 174, 174);
+    margin: 15px 0;
+    padding: 20px;
+    text-align: center;
+    font-size: large;
+    color: red;
+    font-weight: 600;
+  }
+  .fieldContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .fieldCard {
+      display: block;
+      max-width: 600px;
+      width: 80%;
+      background: linear-gradient(
+        45deg,
+        rgb(46, 166, 206),
+        rgb(24, 134, 170),
+        rgb(11, 89, 115)
+      );
+      margin: 10px 0 0 0;
+      padding: 5px 5px 1px 5px;
+      box-shadow: 2px 2px 2px;
+    }
+    .updateBtn{
+      margin-top: 10px;
+    }
+  }
+}
