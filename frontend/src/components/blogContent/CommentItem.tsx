@@ -40,10 +40,16 @@ const CommentItem = ({
     commentUser && (
       <Card className="mb-1 p-0">
         <div className="d-flex justify-content-between">
-            <Card.Title as={"h6"} className="w-auto ms-1 mt-1">
-              {commentUser?.firstName} {commentUser?.lastName}
-            </Card.Title>
-            <OptionsButton btnArr={btnArr} onEditButtonClicked={editComment} onDeleteButtonClicked={deleteComment}/>
+          <Card.Title as={"h6"} className="w-auto ms-1 mt-1">
+            {commentUser?.firstName} {commentUser?.lastName}
+          </Card.Title>
+          {btnArr[1] && (
+            <OptionsButton
+              btnArr={btnArr}
+              onEditButtonClicked={editComment}
+              onDeleteButtonClicked={deleteComment}
+            />
+          )}
         </div>
         <Row>
           <Card.Text className="ms-1">{comment.commentText}</Card.Text>
