@@ -15,6 +15,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
 import BlogListContextProvider from "./store/blog-list-store";
 import UserContextProvider from "./store/loggedInUser-store";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   const [showSignupModal, setShowSignupModal] = useState(false);
@@ -49,6 +50,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<MainContentPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
                   <Route path="/*" element={<NotFoundPage />} />
                 </Routes>
 
