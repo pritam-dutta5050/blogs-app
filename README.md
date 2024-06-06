@@ -25,6 +25,6 @@ or <br>
 7. Now go to `backend` folder by running `frontend` folder by running `cd ../frontend` command.
 8. Again install the required node_modules by running `npm install` command.
 9. Again run the frontend server by running `npm start` command.
-10. Now you are ready to go to test the App .
+10. Now you are ready to go to test the App.
 
 
