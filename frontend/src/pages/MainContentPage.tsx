@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { UserContext } from "../store/loggedInUser-store";
-import LoggedOutContent from "../components/blogContent/LoggedOutContent";
+import { useSelector } from "react-redux";
 import LoggedInContent from "../components/blogContent/LoggedInContent";
+import LoggedOutContent from "../components/blogContent/LoggedOutContent";
+import { RootState } from "../redux-store";
 
 const MainContentPage = () => {
-  const { user } = useContext(UserContext);
+  const user = useSelector((state:RootState) => state.user).user;
   return <div>{user ? <LoggedInContent /> : <LoggedOutContent />}</div>;
 };
 

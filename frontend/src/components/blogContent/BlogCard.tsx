@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { HttpError } from "http-errors";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -14,8 +14,9 @@ import { BlogModel } from "../../models/BlogModel";
 import { UserModel } from "../../models/UserModel";
 import * as BlogsApi from "../../network/blogs_api";
 import * as UsersApi from "../../network/users_api";
-import { BlogListContext } from "../../store/blog-list-store";
-import { UserContext } from "../../store/loggedInUser-store";
+import { useSelector } from "react-redux";
+import store, { RootState } from "../../redux-store";
+import { deleteBlog, hideBlog } from "../../redux-store/blogListSlice";
 import { formatDate } from "../../utils/formatDate";
 import CommentsModal from "../modals/CommentsModal";
 import styles from "./BlogCard.module.css";
@@ -31,8 +32,7 @@ const BlogCard = ({ blog, onEditButtonClicked }: BlogCardProps) => {
   const [currentBlog, setCurrentBlog] = useState<BlogModel>(blog);
   const [blogUser, setBlogUser] = useState<UserModel | null>(null);
 
-  const loggedInuserId = useContext(UserContext).user?._id;
-  const { hideBlog, deleteBlog } = useContext(BlogListContext);
+  const loggedInuserId = useSelector((state:RootState)=> state.user.user?._id);
 
   async function likeBlog(blogId: string) {
     try {
@@ -75,14 +75,14 @@ const BlogCard = ({ blog, onEditButtonClicked }: BlogCardProps) => {
                 btnArr={[true, true]}
                 onEditButtonClicked={onEditButtonClicked}
                 onDeleteButtonClicked={() => {
-                  deleteBlog(blog._id);
+                  store.dispatch(deleteBlog(blog._id));
                 }}
               />
             )}
             <Button
               variant="outline-danger"
               className={`${styles.headerButton}`}
-              onClick={() => hideBlog(blog._id)}
+              onClick={() => store.dispatch(hideBlog(blog._id))}
             >
               <RxCross1 />
             </Button>

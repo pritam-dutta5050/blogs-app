@@ -1,8 +1,8 @@
-import { useContext } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { LoginInterface } from "../../interfaces/LoginInterface";
-import { UserContext } from "../../store/loggedInUser-store";
+import store from "../../redux-store";
+import { loginUser } from "../../redux-store/userSlice";
 import TextInputField from "../form/TextInputField";
 
 interface LoginModalInterface {
@@ -11,8 +11,7 @@ interface LoginModalInterface {
 }
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalInterface) => {
-  // const [errorText, setErrorText] = useState<string | null>(null);
-  const {loginUser} = useContext(UserContext);
+
   const {
     register,
     handleSubmit,
@@ -25,7 +24,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalInterface) => {
   });
 
   async function onSubmit(credentials: LoginInterface) {
-    loginUser(credentials);
+    store.dispatch(loginUser(credentials));
     onLoginSuccessful(true);
   }
 

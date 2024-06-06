@@ -1,8 +1,8 @@
-import { useContext } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { SignupInterface } from "../../interfaces/SignupInterface";
-import { UserContext } from "../../store/loggedInUser-store";
+import store from "../../redux-store";
+import { signupUser } from "../../redux-store/userSlice";
 import TextInputField from "../form/TextInputField";
 
 interface SignupModalInterface {
@@ -11,8 +11,7 @@ interface SignupModalInterface {
 }
 
 const SignupModal = ({ onDismiss, onSignupSuccessful }: SignupModalInterface) => {
-  // const [errorText, setErrorText] = useState<string|null>(null);
-  const {signUpUser} = useContext(UserContext);
+  
   const {
     register,
     handleSubmit,
@@ -27,7 +26,7 @@ const SignupModal = ({ onDismiss, onSignupSuccessful }: SignupModalInterface) =>
   });
 
   async function onSubmit(credentials: SignupInterface) {
-    signUpUser(credentials);
+    store.dispatch(signupUser(credentials));
     onSignupSuccessful(true);
   }
   console.log("SignupModal component rendered");

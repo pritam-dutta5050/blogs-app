@@ -1,8 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import { Button, Container, Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Container } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { BlogInterface } from "../../interfaces/BlogInterface";
 import { BlogModel } from "../../models/BlogModel";
-import { BlogListContext } from "../../store/blog-list-store";
+import store, { RootState } from "../../redux-store";
+import { addBlog, editBlog, fetchBlogs } from "../../redux-store/blogListSlice";
 import AddEditBlogModal from "../modals/AddEditBlogModal";
 import AllBlogs from "./AllBlogs";
 import styles from "./LoggedInContent.module.css";
@@ -13,21 +15,20 @@ const LoggedInContent = () => {
 
   console.log("LoggedInComponent rendered");
 
-  const { blogList, loadBlogs, isFetching, isFetchingError, addBlog, editBlog } =
-    useContext(BlogListContext);
+  const blogList = useSelector((state:RootState)=>state.bloglist.BlogList);
 
   console.log(blogList);
 
   useEffect(() => {
-    loadBlogs();
+    store.dispatch(fetchBlogs());
   }, []);
   
   function onSubmitClickHandler(blogBody: BlogInterface) {
     if (!blogToEdit) {
-      addBlog(blogBody);
+      store.dispatch(addBlog(blogBody));
       setShowAddEditBlogModal(false);
     } else {
-      editBlog(blogBody, blogToEdit._id);
+      store.dispatch(editBlog({blog:blogBody, blogId:blogToEdit._id}));
       setBlogToEdit(null);
     }
   }
@@ -43,8 +44,9 @@ const LoggedInContent = () => {
           Add Blog
         </Button>
       </center>
-      {isFetchingError && <center>Something went wrong, please refresh or try again</center>}
-      {isFetching ? <Spinner animation="border" variant="primary" /> : <AllBlogs setBlogToEdit={(blog) => setBlogToEdit(blog) }/>}
+      {/* {isFetchingError && <center>Something went wrong, please refresh or try again</center>} */}
+      {/* {isFetching ? <Spinner animation="border" variant="primary" /> : <AllBlogs setBlogToEdit={(blog) => setBlogToEdit(blog) }/>} */}
+      <AllBlogs setBlogToEdit={(blog) => setBlogToEdit(blog) }/>
       
       {blogToEdit && (
         <AddEditBlogModal

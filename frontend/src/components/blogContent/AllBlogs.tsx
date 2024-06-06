@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
-import { BlogListContext } from '../../store/blog-list-store';
+import { useSelector } from 'react-redux';
 import { BlogModel } from '../../models/BlogModel';
+import { RootState } from '../../redux-store';
 import BlogCard from './BlogCard';
 interface AllBlogsProps{
     setBlogToEdit: (blog:BlogModel) => void;
 }
 const AllBlogs = ({setBlogToEdit}:AllBlogsProps) => {
-    const { blogList } = useContext(BlogListContext);
+  
+    const blogList = useSelector((state:RootState)=> state.bloglist).BlogList;
+
     // console.log("All blogs rendered");
   return (
     <div>

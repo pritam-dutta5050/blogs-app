@@ -1,16 +1,19 @@
 import ReactDOM from "react-dom/client";
-// import './index.css';
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import WithRedirectToHome from "./utils/WithredirectToHome";
+import { Provider } from "react-redux";
+import store from "./redux-store";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-const WrappedHomePage = WithRedirectToHome(App);
+const WrappedAppPage = WithRedirectToHome(App);
 root.render(
   // <React.StrictMode>
-  < WrappedHomePage/>
+  <Provider store={store}>
+  < WrappedAppPage/>
+  </Provider>
   // </React.StrictMode>
 );
 
