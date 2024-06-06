@@ -1,13 +1,14 @@
-import { useContext } from "react";
 import { Navbar } from "react-bootstrap";
-import { UserContext } from "../../store/loggedInUser-store";
+import { useSelector } from "react-redux";
+import store, { RootState } from "../../redux-store";
+import { logoutUser } from "../../redux-store/userSlice";
 
 const NavBarLoggedinView = () => {
 
-  const {user, logoutUser} = useContext(UserContext);
+  const user = useSelector((state:RootState)=> state.user.user);
 
   async function logout() {
-   logoutUser();
+    store.dispatch(logoutUser());
 }
   return (
     <>

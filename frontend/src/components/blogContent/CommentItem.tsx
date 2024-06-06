@@ -4,8 +4,9 @@ import { Card, Row } from "react-bootstrap";
 import { UserModel } from "../../models/UserModel";
 import { CommentModel } from "../../models/commentModel";
 import * as UsersApi from "../../network/users_api";
-import { UserContext } from "../../store/loggedInUser-store";
 import OptionsButton from "./OptionsButton";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux-store";
 
 interface CommentItemProps {
   comment: CommentModel;
@@ -20,7 +21,8 @@ const CommentItem = ({
   editComment,
 }: CommentItemProps) => {
   const [commentUser, setCommentUser] = useState<UserModel | null>(null);
-  const loggedInUserId = useContext(UserContext).user?._id;
+
+  const loggedInUserId = useSelector((state:RootState)=>state.user.user?._id);
 
   useEffect(() => {
     async function getUserById(userId: string) {

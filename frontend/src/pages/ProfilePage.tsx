@@ -1,20 +1,18 @@
-import { useContext, useState } from "react";
-import {
-  Button,
-  Card,
-  Form
-} from "react-bootstrap";
+import { useState } from "react";
+import { Button, Card, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { FaEdit } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+import { useSelector } from "react-redux";
 import TextInputField from "../components/form/TextInputField";
 import stylesTIF from "../components/form/TextInputField.module.css";
 import { UserModel } from "../models/UserModel";
-import { UserContext } from "../store/loggedInUser-store";
+import store, { RootState } from "../redux-store";
+import { updateUser } from "../redux-store/userSlice";
 import styles from "./ProfilePage.module.css";
 
 const ProfilePage = () => {
-  const { user,updateUser } = useContext(UserContext);
+  const user = useSelector((state:RootState)=> state.user.user);
   const [editDisabled, setEditDisabled] = useState(true);
   const {
     register,
@@ -35,7 +33,7 @@ const ProfilePage = () => {
 
   const onSubmit = (data: UserModel) => {
     console.log(data);
-    updateUser(data, user?._id ? user._id : "")
+    store.dispatch(updateUser({userData:data, userId: user?._id ? user._id : ""}))
     setEditDisabled(true);
   };
   return (

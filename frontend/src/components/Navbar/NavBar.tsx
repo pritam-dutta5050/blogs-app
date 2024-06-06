@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { MdMenu } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../store/loggedInUser-store";
-import styles from "./NavBar.module.css";
+import { RootState } from "../../redux-store";
 import NavBarLoggedinView from "./NavBarLoggedinView";
 import NavBarLoggedOutView from "./NavBarLoogedOutView";
 
@@ -12,7 +11,6 @@ interface NavBarProps {
   showOffcanvasButtonClicked: () => void;
   onSignupClicked: () => void;
   onLoginClicked: () => void;
-  // onLogoutSuccessful: () => void;
 }
 
 const NavBar = ({
@@ -20,10 +18,9 @@ const NavBar = ({
   showOffcanvasButtonClicked,
   onSignupClicked,
   onLoginClicked,
-  // onLogoutSuccessful,
 }: NavBarProps) => {
 
-  const {user} = useContext(UserContext);
+  const user = useSelector((state:RootState)=>state.user.user);
 
   return (
     <Navbar
@@ -31,8 +28,6 @@ const NavBar = ({
       variant="dark"
       expand="sm"
       sticky="top"
-      // className={styles.navbar1}
-      // style={{height: '68px'}}
     >
       <Container >
       {showOffcanvasButton && (
@@ -52,9 +47,7 @@ const NavBar = ({
           </Nav>
           <Nav className="ms-auto">
             {user ? (
-              <NavBarLoggedinView
-              // onLogoutSuccessful={onLogoutSuccessful}
-              />
+              <NavBarLoggedinView/>
             ) : (
               <NavBarLoggedOutView
               onSignupClicked={onSignupClicked}

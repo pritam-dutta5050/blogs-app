@@ -44,7 +44,7 @@ export const addBlog = createAsyncThunk("bloglist/addBlog",async (blog:BlogInter
         return resObj;
     }
 });
-export const updateBlog = createAsyncThunk("bloglist/updateBlog",async (payload:{blog:BlogInterface, blogId:string})=>{
+export const editBlog = createAsyncThunk("bloglist/updateBlog",async (payload:{blog:BlogInterface, blogId:string})=>{
     console.log("Updating blog...");
     let resObj: singleBlogInterface = {blog:null, status:"idle"};
     try {
@@ -60,7 +60,7 @@ export const updateBlog = createAsyncThunk("bloglist/updateBlog",async (payload:
         return resObj;
     }
 });
-export const deleteblog = createAsyncThunk("bloglist/deleteBlog",async (blogId:string)=>{
+export const deleteBlog = createAsyncThunk("bloglist/deleteBlog",async (blogId:string)=>{
     
     let resObj:{resBlogId:string, status:"idle" | "pending" | "succeeded" | "failed"} = {resBlogId: "", status:"idle"};
     try {
@@ -94,7 +94,7 @@ const bloglistSlice = createSlice({
                 state.status = action.payload.status;
             }
         })
-        .addCase(updateBlog.fulfilled, (state, action)=>{
+        .addCase(editBlog.fulfilled, (state, action)=>{
             const resBlog = action.payload.blog;
             if(resBlog){
                 const updatedBlogs = state.BlogList.map(blog=>blog._id===resBlog._id ? resBlog : blog);
@@ -104,7 +104,8 @@ const bloglistSlice = createSlice({
                 state.status = action.payload.status;
             }
         })
-        .addCase(deleteblog.fulfilled, (state, action)=>{
+        
+        .addCase(deleteBlog.fulfilled, (state, action)=>{
             console.log("deleting blog...");
             const resBlogId = action.payload.resBlogId;
             if(resBlogId){

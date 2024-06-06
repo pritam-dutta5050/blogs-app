@@ -1,9 +1,7 @@
 import { useSelector } from 'react-redux'
-import { SignupInterface } from '../interfaces/SignupInterface'
-import store, { RootState } from '../redux-store'
-import { fetchUser, loginUser, logoutUser, signupUser } from '../redux-store/userSlice'
-import { addBlog, deleteblog, fetchBlogs, updateBlog, hideBlog } from '../redux-store/blogListSlice'
 import { BlogInterface } from '../interfaces/BlogInterface'
+import { SignupInterface } from '../interfaces/SignupInterface'
+import { RootState } from '../redux-store'
 
 const SettingsPage = () => {
     const user = useSelector((state:RootState) => state.user);
